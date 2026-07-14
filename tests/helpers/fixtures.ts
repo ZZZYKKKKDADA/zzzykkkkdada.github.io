@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
-import { cp, mkdtemp, readFile, readdir } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
@@ -8,6 +8,7 @@ import { promisify } from "node:util";
 
 export const HASH_A = "a".repeat(64);
 export const HASH_B = "b".repeat(64);
+export const HASH_C = "c".repeat(64);
 export const validReportRoute = "/stocks/002050-sz/2026-07-13/20260713-215103-aaaaaaaa/";
 export const validDownloadRoute = "/reports/002050-sz/2026-07-13/20260713-215103-aaaaaaaa/complete_report.md";
 export const validDownloadPath = validDownloadRoute.slice(1);
@@ -59,6 +60,132 @@ export async function treeDigest(root: string): Promise<string> {
     hash.update(path).update("\0").update(bytes).update("\0");
   }
   return hash.digest("hex");
+}
+
+export async function makeSharedProviderSite(
+  state:
+    | "allowed"
+    | "restricted"
+    | "editorial-withdrawal"
+    | "partial-withdrawal"
+    | "complete-withdrawal"
+): Promise<string> {
+  const root = await copyFixture("valid");
+  const packageA = join(
+    root,
+    "reports/002050-sz/2026-07-13/20260713-215103-aaaaaaaa"
+  );
+  const packageB = join(
+    root,
+    "reports/002050-sz/2026-07-12/20260712-120000-bbbbbbbb"
+  );
+  await mkdir(packageB, { recursive: true });
+  const markdown = await readFile(join(packageA, "complete_report.md"));
+  await writeFile(join(packageB, "complete_report.md"), markdown);
+
+  const summaryB = {
+    ...validSummary,
+    analysis_date: "2026-07-12",
+    version_id: "20260712-120000-bbbbbbbb",
+    source_tree_hash: HASH_B,
+    content_hash: HASH_C,
+    report_route: "/stocks/002050-sz/2026-07-12/20260712-120000-bbbbbbbb/",
+    download_route:
+      "/reports/002050-sz/2026-07-12/20260712-120000-bbbbbbbb/complete_report.md"
+  };
+  const summaryBytes = Buffer.from(`${JSON.stringify(summaryB, null, 2)}\n`);
+  await writeFile(join(packageB, "summary.json"), summaryBytes);
+  const manifestB = {
+    ...validManifest,
+    analysis_date: summaryB.analysis_date,
+    source_display_timestamp: "20260712_120000",
+    version_id: summaryB.version_id,
+    source_tree_hash: summaryB.source_tree_hash,
+    content_hash: summaryB.content_hash,
+    summary_sha256: createHash("sha256").update(summaryBytes).digest("hex"),
+    complete_report_sha256: createHash("sha256").update(markdown).digest("hex"),
+    report_route: summaryB.report_route,
+    download_route: summaryB.download_route
+  };
+  await writeFile(join(packageB, "manifest.json"), `${JSON.stringify(manifestB, null, 2)}\n`);
+
+  const policy = {
+    schema_version: 1,
+    entries: [
+      {
+        id: "synthetic-local-v1",
+        source_class: "synthetic_local",
+        status:
+          state === "allowed" || state === "editorial-withdrawal"
+            ? "allowed"
+            : "restricted",
+        allowed_content_classes: ["derived_fact", "locally_authored_analysis"],
+        prohibited_content_classes: ["raw_payload"],
+        required_attribution: "合成测试数据，不代表真实市场信息。",
+        terms_url: "https://example.invalid/synthetic-source",
+        reviewed_on: "2026-07-14"
+      }
+    ]
+  };
+  const policyYaml = [
+    "schema_version: 1",
+    "entries:",
+    "  - id: synthetic-local-v1",
+    "    source_class: synthetic_local",
+    `    status: ${policy.entries[0].status}`,
+    "    allowed_content_classes:",
+    "      - derived_fact",
+    "      - locally_authored_analysis",
+    "    prohibited_content_classes:",
+    "      - raw_payload",
+    "    required_attribution: 合成测试数据，不代表真实市场信息。",
+    "    terms_url: https://example.invalid/synthetic-source",
+    "    reviewed_on: 2026-07-14",
+    ""
+  ].join("\n");
+  await writeFile(join(root, "config/publication-sources.yaml"), policyYaml);
+
+  const publishedA = publishedV1;
+  const publishedB = {
+    schema_version: 1,
+    event_id: "event-published-v2",
+    type: "published",
+    timestamp: "2026-07-14T09:00:00Z",
+    version_id: summaryB.version_id,
+    source_tree_hash: summaryB.source_tree_hash,
+    report_route: summaryB.report_route,
+    download_route: summaryB.download_route
+  };
+  const eventLines: unknown[] = [publishedA, publishedB];
+
+  if (state === "editorial-withdrawal") {
+    eventLines.push(editorialWithdrawal);
+  }
+  if (state === "partial-withdrawal" || state === "complete-withdrawal") {
+    await rm(packageA, { recursive: true });
+    eventLines.push(editorialToEmergency(editorialWithdrawal, "event-emergency-v1"));
+  }
+  if (state === "complete-withdrawal") {
+    await rm(packageB, { recursive: true });
+    eventLines.push({
+      ...editorialToEmergency(emergencyWithdrawal, "event-emergency-v2"),
+      source_tree_hash: summaryB.source_tree_hash
+    });
+  }
+  await writeFile(
+    join(root, "publication-events.jsonl"),
+    `${eventLines.map((event) => JSON.stringify(event)).join("\n")}\n`
+  );
+  return root;
+}
+
+function editorialToEmergency(event: any, eventId: string): any {
+  return {
+    ...event,
+    event_id: eventId,
+    mode: "emergency",
+    public_reason: "来源许可状态变化"
+  };
 }
 
 export const siteRoot = fixture("valid");

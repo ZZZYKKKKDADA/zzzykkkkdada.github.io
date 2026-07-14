@@ -1,4 +1,4 @@
-import { appendFile, symlink } from "node:fs/promises";
+import { appendFile, mkdir, symlink } from "node:fs/promises";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadSiteRepository } from "../../src/lib/repository";
@@ -27,5 +27,12 @@ describe("site repository inventory", () => {
     const tree = await copyFixture("valid");
     await symlink("publication-events.jsonl", join(tree, "linked-events"));
     await expect(loadSiteRepository(tree)).rejects.toThrow("UNSAFE_REPOSITORY_ENTRY");
+  });
+
+  it("ignores package-manager links outside the versioned candidate tree", async () => {
+    const tree = await copyFixture("valid");
+    await mkdir(join(tree, "node_modules/.bin"), { recursive: true });
+    await symlink("../../publication-events.jsonl", join(tree, "node_modules/.bin/tool"));
+    await expect(loadSiteRepository(tree)).resolves.toMatchObject({ root: tree });
   });
 });

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "ticker": "002050.SZ",
+  "ticker_slug": "002050-sz",
+  "company": "三花智控",
+  "market": "A股",
+  "analysis_date": "2026-07-13",
+  "publication_date": "2026-07-14",
+  "source_display_timestamp": "20260713_215103",
+  "version_id": "20260713-215103-aaaaaaaa",
+  "source_tree_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "content_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "summary_sha256": "3785c1d27c942eeeaee10ac14b77fcbac66db9bfa4e3166b032ca8527bc0a805",
+  "complete_report_sha256": "630587343aa7673b02dea4ed260b4f7c078d9faa3adfaba324b4013d501a9632",
+  "publisher_version": "0.1.0",
+  "provenance_attestation_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "source_classes": [
+    {
+      "source_class": "synthetic_local",
+      "content_classes": ["derived_fact", "locally_authored_analysis"],
+      "attribution_text": "合成测试数据，不代表真实市场信息。",
+      "terms_url": "https://example.invalid/synthetic-source",
+      "policy_entry_id": "synthetic-local-v1"
+    }
+  ],
+  "report_route": "/stocks/002050-sz/2026-07-13/20260713-215103-aaaaaaaa/",
+  "download_route": "/reports/002050-sz/2026-07-13/20260713-215103-aaaaaaaa/complete_report.md"
+}

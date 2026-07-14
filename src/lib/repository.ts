@@ -38,12 +38,22 @@ function ensureInside(root: string, path: string): void {
   }
 }
 
+const IGNORED_GENERATED_ROOTS = new Set([
+  ".astro",
+  ".git",
+  "dist",
+  "node_modules",
+  "playwright-report",
+  "test-results"
+]);
+
 async function inventorySafeFiles(root: string, current = root): Promise<string[]> {
   const result: string[] = [];
   const entries = await readdir(current, { withFileTypes: true });
   entries.sort((left, right) => left.name.localeCompare(right.name, "en"));
 
   for (const entry of entries) {
+    if (current === root && IGNORED_GENERATED_ROOTS.has(entry.name)) continue;
     const path = join(current, entry.name);
     ensureInside(root, path);
     const metadata = await lstat(path);
