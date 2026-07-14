@@ -1,0 +1,65 @@
+---
+import type { Summary } from "../lib/contracts";
+
+interface Props {
+  matrix: Summary["advice_matrix"];
+}
+
+const { matrix } = Astro.props;
+const positions = {
+  none: "空仓",
+  light: "轻仓",
+  medium: "中等仓位",
+  heavy: "重仓"
+};
+const styles = {
+  short_aggressive: "短线激进",
+  short_conservative: "短线保守",
+  long_aggressive: "中长线激进",
+  long_conservative: "中长线保守"
+};
+const styleOrder = [
+  "short_aggressive",
+  "short_conservative",
+  "long_aggressive",
+  "long_conservative"
+] as const;
+---
+
+<section class="advice-section" aria-labelledby="advice-title">
+  <header>
+    <p>具体操作建议</p>
+    <h2 id="advice-title">按仓位与交易风格</h2>
+  </header>
+  <div class="table-scroll">
+    <table aria-label="仓位与交易风格建议">
+      <thead>
+        <tr>
+          <th scope="col">当前仓位</th>
+          {styleOrder.map((style) => <th scope="col">{styles[style]}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {matrix.map((row) => (
+          <tr>
+            <th scope="row">{positions[row.position]}</th>
+            {styleOrder.map((style) => {
+              const cell = row.cells.find((item) => item.style === style)!;
+              return (
+                <td>
+                  <strong>{cell.action}</strong>
+                  {cell.conditions.length > 0 && (
+                    <ul>
+                      {cell.conditions.map((condition) => <li>{condition}</li>)}
+                    </ul>
+                  )}
+                  <p>主要风险：{cell.risk}</p>
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

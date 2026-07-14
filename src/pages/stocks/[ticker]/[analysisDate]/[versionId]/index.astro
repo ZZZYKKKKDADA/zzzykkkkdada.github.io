@@ -1,0 +1,85 @@
+---
+import AdviceMatrix from "../../../../../components/AdviceMatrix.astro";
+import AnalysisDateRail from "../../../../../components/AnalysisDateRail.astro";
+import CompleteReport from "../../../../../components/CompleteReport.astro";
+import MetricGroups from "../../../../../components/MetricGroups.astro";
+import ReportBanner from "../../../../../components/ReportBanner.astro";
+import BaseLayout from "../../../../../layouts/BaseLayout.astro";
+import { buildSiteViews, type ReportView } from "../../../../../lib/views";
+
+export async function getStaticPaths() {
+  const views = await buildSiteViews(process.env.REPORT_SITE_ROOT ?? process.cwd());
+  return views.reports.map((report) => ({
+    params: {
+      ticker: report.tickerSlug,
+      analysisDate: report.analysisDate,
+      versionId: report.versionId
+    },
+    props: { report }
+  }));
+}
+
+interface Props {
+  report: ReportView;
+}
+
+const { report } = Astro.props;
+const summary = report.summary;
+---
+
+<BaseLayout title={`${report.company} ${report.analysisDate} | 公开交易研究档案`}>
+  <article class:list={["report-page", `report-page--${report.status}`]}>
+    <AnalysisDateRail
+      analysisDate={report.analysisDate}
+      publicationDate={report.publicationDate}
+      versionId={report.versionId}
+    />
+    <ReportBanner
+      status={report.status}
+      reason={report.withdrawalReason}
+      replacementVersionId={report.replacementVersionId}
+    />
+
+    {report.status === "emergency_withdrawn" ? (
+      <section class="withdrawal-tombstone" aria-labelledby="withdrawal-title">
+        <h1 id="withdrawal-title">该报告内容已停止提供</h1>
+        <p>{report.withdrawalReason}</p>
+        <p>当前页面仅保留不含原报告内容的撤下记录。</p>
+        <a href="/">返回股票目录</a>
+      </section>
+    ) : summary && report.markdown ? (
+      <>
+        <header class="report-introduction">
+          <nav aria-label="面包屑">
+            <a href="/">股票目录</a>
+            <span aria-hidden="true">/</span>
+            <a href={`/stocks/${report.tickerSlug}/`}>{report.ticker}</a>
+          </nav>
+          <p>{report.market}</p>
+          <h1>{report.company} <span>{report.ticker}</span></h1>
+          <p class="rating">报告评级：{summary.rating}</p>
+          <p class="conclusion">{summary.conclusion}</p>
+        </header>
+
+        <AdviceMatrix matrix={summary.advice_matrix} />
+        <MetricGroups groups={summary.metric_groups} />
+
+        <section class="report-disclosure" aria-labelledby="disclosure-title">
+          <h2 id="disclosure-title">使用边界与来源</h2>
+          <strong>仅供研究交流，不构成个性化投资建议</strong>
+          <p>{summary.disclaimer.historical_boundary}</p>
+          <p>{summary.disclaimer.ai_assisted}</p>
+          <p>{summary.disclaimer.not_investment_advice}</p>
+          <ul>
+            {summary.attributions.map((item) => (
+              <li><a href={item.url} rel="noopener noreferrer">{item.text}</a></li>
+            ))}
+          </ul>
+          <a href={report.downloadRoute!} download>下载完整 Markdown</a>
+        </section>
+
+        <CompleteReport versionId={report.versionId} markdown={report.markdown} />
+      </>
+    ) : null}
+  </article>
+</BaseLayout>

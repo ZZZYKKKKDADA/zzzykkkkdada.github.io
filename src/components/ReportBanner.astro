@@ -1,0 +1,23 @@
+---
+import type { LifecycleStatus } from "../lib/lifecycle";
+
+interface Props {
+  status: LifecycleStatus;
+  reason?: string;
+  replacementVersionId?: string;
+}
+
+const { status, reason, replacementVersionId } = Astro.props;
+const labels = {
+  current: "当前有效版本",
+  superseded: "本版本已被修订",
+  editorial_withdrawn: "本版本已编辑性撤下",
+  emergency_withdrawn: "本报告已紧急撤下"
+};
+---
+
+<aside class:list={["report-banner", `report-banner--${status}`]} aria-label="报告状态">
+  <strong>{labels[status]}</strong>
+  {replacementVersionId && <p>替代版本：{replacementVersionId}</p>}
+  {reason && <p>{reason}</p>}
+</aside>

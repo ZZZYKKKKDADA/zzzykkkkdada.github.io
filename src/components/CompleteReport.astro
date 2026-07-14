@@ -1,0 +1,78 @@
+---
+import type { RenderedMarkdown } from "../lib/markdown";
+
+interface Props {
+  versionId: string;
+  markdown: RenderedMarkdown;
+}
+
+const { versionId, markdown } = Astro.props;
+const safeId = versionId.replace(/[^a-zA-Z0-9-]/g, "-");
+const panelId = `complete-report-${safeId}`;
+const buttonId = `complete-report-toggle-${safeId}`;
+---
+
+<section
+  class="complete-report"
+  aria-labelledby={`complete-report-title-${safeId}`}
+  data-complete-report
+>
+  <header>
+    <p>原始长文</p>
+    <h2 id={`complete-report-title-${safeId}`}>完整报告</h2>
+    <button id={buttonId} type="button" aria-controls={panelId} aria-expanded="false">
+      展开完整报告
+    </button>
+  </header>
+
+  <nav aria-label="完整报告目录">
+    <h3>报告目录</h3>
+    <ol>
+      {markdown.toc.map((item) => (
+        <li data-depth={item.depth}>
+          <a href={`#${item.id}`} data-report-anchor>{item.text}</a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+
+  <div id={panelId} class="markdown-body" hidden set:html={markdown.html} />
+</section>
+
+<script>
+  for (const container of document.querySelectorAll<HTMLElement>("[data-complete-report]")) {
+    const button = container.querySelector<HTMLButtonElement>("button[aria-controls]");
+    const panelId = button?.getAttribute("aria-controls");
+    const panel = panelId ? document.getElementById(panelId) : null;
+    if (!(panel instanceof HTMLElement) || !(button instanceof HTMLButtonElement)) continue;
+    const reportPanel = panel;
+    const toggleButton = button;
+
+    function setExpanded(expanded: boolean) {
+      reportPanel.hidden = !expanded;
+      toggleButton.setAttribute("aria-expanded", String(expanded));
+      toggleButton.textContent = expanded ? "折叠完整报告" : "展开完整报告";
+    }
+
+    toggleButton.addEventListener("click", () => {
+      setExpanded(toggleButton.getAttribute("aria-expanded") !== "true");
+    });
+
+    for (const anchor of container.querySelectorAll<HTMLAnchorElement>(
+      `[data-report-anchor][href^="#"]`
+    )) {
+      anchor.addEventListener("click", (event) => {
+        const href = anchor.getAttribute("href");
+        if (!href) return;
+        const target = document.getElementById(decodeURIComponent(href.slice(1)));
+        if (!(target instanceof HTMLElement)) return;
+        event.preventDefault();
+        setExpanded(true);
+        target.setAttribute("tabindex", "-1");
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ block: "start", behavior: "smooth" });
+        history.replaceState(null, "", href);
+      });
+    }
+  }
+</script>

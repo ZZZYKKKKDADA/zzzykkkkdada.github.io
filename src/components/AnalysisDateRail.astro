@@ -1,0 +1,21 @@
+---
+interface Props {
+  analysisDate: string;
+  publicationDate: string | null;
+  versionId: string;
+}
+
+const { analysisDate, publicationDate, versionId } = Astro.props;
+---
+
+<aside class="analysis-date-rail" aria-label="报告时间边界">
+  <p>分析时点</p>
+  <time datetime={analysisDate}>{analysisDate}</time>
+  {publicationDate && (
+    <p>
+      发布日期 <time datetime={publicationDate}>{publicationDate}</time>
+    </p>
+  )}
+  <p>版本 {versionId}</p>
+  <strong>历史研究快照，不代表当前观点</strong>
+</aside>
