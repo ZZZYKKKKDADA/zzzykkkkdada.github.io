@@ -1,0 +1,44 @@
+---
+import SiteHeader from "../components/SiteHeader.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "公开交易研究报告的历史快照与完整分析档案。"
+} = Astro.props;
+const csp = [
+  "default-src 'self'",
+  "base-uri 'none'",
+  "connect-src 'self'",
+  "font-src 'self' data:",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "img-src 'self' data:",
+  "object-src 'none'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'"
+].join("; ");
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content={description} />
+    <meta http-equiv="Content-Security-Policy" content={csp} />
+    <link rel="canonical" href={Astro.url} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <SiteHeader />
+    <main id="main-content">
+      <slot />
+    </main>
+  </body>
+</html>

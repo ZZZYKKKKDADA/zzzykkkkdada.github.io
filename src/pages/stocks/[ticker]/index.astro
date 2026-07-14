@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { buildSiteViews, type TickerView } from "../../../lib/views";
+
+export async function getStaticPaths() {
+  const views = await buildSiteViews(process.env.REPORT_SITE_ROOT ?? process.cwd());
+  return views.tickers.map((ticker) => ({
+    params: { ticker: ticker.tickerSlug },
+    props: { ticker }
+  }));
+}
+
+interface Props {
+  ticker: TickerView;
+}
+
+const { ticker } = Astro.props;
+const statusLabels = {
+  current: "当前版本",
+  superseded: "已被修订",
+  editorial_withdrawn: "编辑性撤下",
+  emergency_withdrawn: "紧急撤下"
+};
+---
+
+<BaseLayout title={`${ticker.company} ${ticker.ticker} | 公开交易研究档案`}>
+  <section class="ticker-timeline" aria-labelledby="ticker-title">
+    <nav aria-label="面包屑">
+      <a href="/">股票目录</a>
+      <span aria-hidden="true">/</span>
+      <span>{ticker.ticker}</span>
+    </nav>
+
+    <header>
+      <p>{ticker.market}</p>
+      <h1 id="ticker-title">{ticker.company}</h1>
+      <p>{ticker.ticker}</p>
+      <p>以下版本均为对应分析日期的历史研究快照。</p>
+    </header>
+
+    <h2>版本时间线</h2>
+    <ol>
+      {ticker.reports.map((report) => (
+        <li>
+          <time datetime={report.analysisDate}>{report.analysisDate}</time>
+          <a href={report.reportRoute}>查看研究报告</a>
+          <span>{statusLabels[report.status]}</span>
+          {ticker.latest?.versionId === report.versionId && <strong>最新有效版本</strong>}
+          {report.withdrawalReason && <p>{report.withdrawalReason}</p>}
+        </li>
+      ))}
+    </ol>
+  </section>
+</BaseLayout>

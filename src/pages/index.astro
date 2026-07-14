@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { buildSiteViews } from "../lib/views";
+
+const views = await buildSiteViews(process.env.REPORT_SITE_ROOT ?? process.cwd());
+---
+
+<BaseLayout title="股票目录 | 公开交易研究档案">
+  <section class="directory" aria-labelledby="directory-title">
+    <header>
+      <p>公开报告目录</p>
+      <h1 id="directory-title">股票研究档案</h1>
+      <p>每份报告均为标注分析日期的历史快照，不代表当前观点。</p>
+    </header>
+
+    <label for="stock-search">搜索股票</label>
+    <input
+      id="stock-search"
+      type="search"
+      name="stock-search"
+      placeholder="输入股票代码或公司名称"
+      autocomplete="off"
+    />
+
+    <p id="empty-search" hidden>没有匹配的公开报告。</p>
+    <ul id="stock-directory" aria-live="polite">
+      {views.tickers.map((ticker) => (
+        <li data-stock-row data-search={`${ticker.ticker} ${ticker.tickerSlug} ${ticker.company}`.toLowerCase()}>
+          <a href={`/stocks/${ticker.tickerSlug}/`}>
+            <strong>{ticker.company}</strong>
+            <span>{ticker.ticker}</span>
+            <span>{ticker.reports.length} 个公开版本</span>
+            {ticker.latest && <span>最近分析日 {ticker.latest.analysisDate}</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <script>
+    const input = document.querySelector<HTMLInputElement>("#stock-search");
+    const rows = [...document.querySelectorAll<HTMLElement>("[data-stock-row]")];
+    const empty = document.querySelector<HTMLElement>("#empty-search");
+
+    input?.addEventListener("input", () => {
+      const query = input.value.trim().toLowerCase();
+      let visible = 0;
+      for (const row of rows) {
+        const matches = (row.dataset.search ?? "").includes(query);
+        row.hidden = !matches;
+        if (matches) visible += 1;
+      }
+      if (empty) empty.hidden = visible !== 0;
+    });
+  </script>
+</BaseLayout>
