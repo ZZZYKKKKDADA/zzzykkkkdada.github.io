@@ -31,8 +31,14 @@ const styleOrder = [
     <p>具体操作建议</p>
     <h2 id="advice-title">按仓位与交易风格</h2>
   </header>
-  <div class="table-scroll">
-    <table aria-label="仓位与交易风格建议">
+  <div
+    class="matrix-scroll"
+    data-testid="matrix-scroll"
+    tabindex="0"
+    role="region"
+    aria-label="仓位与交易风格建议横向滚动区"
+  >
+    <table class="advice-matrix" aria-label="仓位与交易风格建议">
       <thead>
         <tr>
           <th scope="col">当前仓位</th>

@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import {
   emergencyDownloadRoute,
@@ -46,4 +47,24 @@ test("download is byte-identical Markdown with a safe media type", async ({ requ
 
 test("emergency withdrawal has no download", async ({ request }) => {
   expect((await request.get(emergencyDownloadRoute)).status()).toBe(404);
+});
+
+test("desktop and mobile report pages have no serious accessibility violations", async ({
+  page
+}) => {
+  await page.goto(validReportRoute);
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(
+    results.violations.filter((violation) =>
+      ["serious", "critical"].includes(violation.impact ?? "")
+    )
+  ).toEqual([]);
+});
+
+test("matrix scrolls without page overflow on mobile", async ({ page }) => {
+  await page.goto(validReportRoute);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
+  ).toBe(true);
+  await expect(page.locator('[data-testid="matrix-scroll"]')).toHaveCSS("overflow-x", "auto");
 });
