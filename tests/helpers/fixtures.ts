@@ -1,6 +1,15 @@
 import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
-import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import {
+  appendFile,
+  cp,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile
+} from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
@@ -211,38 +220,64 @@ export const correctionInput = {
 export const payload = { ...summaryDraft, source_tree_hash: existingHash };
 
 const run = promisify(execFile);
+async function commitAll(repoRoot: string, message: string): Promise<string> {
+  await run("git", ["add", "."], { cwd: repoRoot });
+  await run(
+    "git",
+    ["-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-m", message],
+    { cwd: repoRoot }
+  );
+  const { stdout } = await run("git", ["rev-parse", "HEAD"], { cwd: repoRoot });
+  return stdout.trim();
+}
+
 export async function makeMaintenanceRepo(
   scenario: "repairable" | "ambiguous" | "partial-policy-withdrawal"
 ): Promise<any> {
   const repoRoot = await mkdtemp(join(tmpdir(), "public-report-maintenance-source-"));
-  await cp(fixture(`maintenance/${scenario}`), repoRoot, { recursive: true });
   await run("git", ["init", "-b", "main"], { cwd: repoRoot });
-  await run("git", ["add", "."], { cwd: repoRoot });
-  await run(
-    "git",
-    ["-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-m", "valid base"],
-    { cwd: repoRoot }
-  );
-  const { stdout } = await run("git", ["rev-parse", "HEAD"], { cwd: repoRoot });
-  const baseCommit = stdout.trim();
+
   if (scenario === "partial-policy-withdrawal") {
+    await cp(fixture("shared-provider/restricted"), repoRoot, { recursive: true });
+    const baseCommit = await commitAll(repoRoot, "restricted public site");
     return {
       repoRoot,
       baseCommit,
       targets: [
         {
-          versionId: "policy-v1",
+          versionId: validSummary.version_id,
           publicationCommit: baseCommit,
           mode: "emergency" as const,
           publicReason: "来源许可状态变化"
         }
       ],
-      candidatePolicyPath: join(
-        fixture("maintenance/partial-policy-withdrawal"),
-        "restricted-policy.yaml"
-      )
+      candidatePolicyPath: join(repoRoot, "config/publication-sources.yaml")
     };
   }
+
+  await cp(fixture("valid"), repoRoot, { recursive: true });
+  const validCommit = await commitAll(repoRoot, "valid publication");
+  const packagePath = `reports/002050-sz/2026-07-13/${validSummary.version_id}`;
+  const markdownPath = join(repoRoot, packagePath, "complete_report.md");
+  const manifestPath = join(repoRoot, packagePath, "manifest.json");
+  const { stdout: blobStdout } = await run(
+    "git",
+    ["rev-parse", `${validCommit}:${packagePath}/complete_report.md`],
+    { cwd: repoRoot }
+  );
+
+  if (scenario === "ambiguous") {
+    await appendFile(markdownPath, "\n第二个自洽历史版本。\n");
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+    manifest.complete_report_sha256 = createHash("sha256")
+      .update(await readFile(markdownPath))
+      .digest("hex");
+    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+    await commitAll(repoRoot, "conflicting valid publication bytes");
+  }
+
+  await writeFile(markdownPath, "damaged\n");
+  const baseCommit = await commitAll(repoRoot, "damage publication bytes");
   const repairInput = {
     repoRoot,
     baseCommit,
@@ -250,20 +285,10 @@ export async function makeMaintenanceRepo(
     impactReportHash: HASH_A
   };
   if (scenario === "ambiguous") return repairInput;
-  const { stdout: blobStdout } = await run(
-    "git",
-    [
-      "rev-parse",
-      `HEAD:reports/002050-sz/2026-07-13/${validSummary.version_id}/complete_report.md`
-    ],
-    { cwd: repoRoot }
-  );
   return {
     ...repairInput,
     versionId: validSummary.version_id,
     expectedBlobId: blobStdout.trim(),
-    expectedPackagePaths: [
-      `reports/002050-sz/2026-07-13/${validSummary.version_id}/complete_report.md`
-    ]
+    expectedPackagePaths: [`${packagePath}/complete_report.md`]
   };
 }
