@@ -1,5 +1,11 @@
+import { createHash } from "node:crypto";
 import { expect, test } from "@playwright/test";
-import { validReportRoute } from "../helpers/fixtures";
+import {
+  emergencyDownloadRoute,
+  validDownloadRoute,
+  validManifest,
+  validReportRoute
+} from "../helpers/fixtures";
 
 test("directory searches by ticker and company and opens the timeline", async ({ page }) => {
   await page.goto("/");
@@ -27,4 +33,17 @@ test("complete report expands, anchors, and restores focus", async ({ page }) =>
   await expect(button).toHaveAttribute("aria-expanded", "true");
   await expect(button).toHaveText("折叠完整报告");
   await expect(page.locator("#市场分析")).toBeFocused();
+});
+
+test("download is byte-identical Markdown with a safe media type", async ({ request }) => {
+  const response = await request.get(validDownloadRoute);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("text/markdown");
+  expect(createHash("sha256").update(await response.body()).digest("hex")).toBe(
+    validManifest.complete_report_sha256
+  );
+});
+
+test("emergency withdrawal has no download", async ({ request }) => {
+  expect((await request.get(emergencyDownloadRoute)).status()).toBe(404);
 });
