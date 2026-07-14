@@ -1,2 +1,5 @@
-# zzzykkkkdada.github.io
-trading_report_markdown
+# 公开交易报告站点
+
+这是一个面向协作者的只读研究档案，使用 Astro 构建并部署到 GitHub Pages。
+
+所有公开报告都必须先通过完整性、生命周期和来源许可审计。真实报告仅能通过受控发布流程加入；本仓库的开发与测试使用合成夹具。
