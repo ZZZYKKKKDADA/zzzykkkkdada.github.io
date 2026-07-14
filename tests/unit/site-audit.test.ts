@@ -59,3 +59,14 @@ describe("site-wide compliance audit", () => {
     expect(result.findings).toEqual([]);
   });
 });
+
+describe("Pages deployment contract", () => {
+  it("runs audit before upload and deploy", async () => {
+    const workflow = await readFile(".github/workflows/pages.yml", "utf8");
+    expect(workflow.indexOf("npm run audit")).toBeGreaterThanOrEqual(0);
+    expect(workflow.indexOf("npm run audit")).toBeLessThan(
+      workflow.indexOf("actions/upload-pages-artifact")
+    );
+    expect(workflow).toContain("needs: build");
+  });
+});
