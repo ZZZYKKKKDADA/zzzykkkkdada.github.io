@@ -46,6 +46,34 @@ const IGNORED_GENERATED_ROOTS = new Set([
   "playwright-report",
   "test-results"
 ]);
+const REPORT_FILE_PATTERN =
+  /^reports\/[a-z0-9-]+\/\d{4}-\d{2}-\d{2}\/\d{8}-\d{6}-[a-f0-9]{8,64}\/(manifest\.json|summary\.json|complete_report\.md)$/;
+const CONTROL_PATTERN = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/;
+const PRIVATE_PATTERNS = [
+  /\/Volumes\//i,
+  /\/Users\//i,
+  /file:\/\//i,
+  /(?:^|[^A-Za-z0-9_])\.env(?:[^A-Za-z0-9_]|$)/i,
+  /private[_ -]?source[_ -]?map/i,
+  /source map/i,
+  /validation (?:excerpt|output|artifact)/i,
+  /reasoning trace/i,
+  /system prompt/i,
+  /model messages?/i,
+  /(?:api[_ -]?key|access[_ -]?token|secret|password)\s*[:=]\s*[^\s,}\]]+/i
+];
+
+function assertPublicBytes(bytes: Uint8Array): void {
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    throw failure("UNSAFE_PUBLIC_CONTENT");
+  }
+  if (CONTROL_PATTERN.test(text) || PRIVATE_PATTERNS.some((pattern) => pattern.test(text))) {
+    throw failure("UNSAFE_PUBLIC_CONTENT");
+  }
+}
 
 async function inventorySafeFiles(root: string, current = root): Promise<string[]> {
   const result: string[] = [];
@@ -121,6 +149,8 @@ async function loadPackage(root: string, manifestPath: string): Promise<LoadedPa
     throw failure("INCOMPLETE_REPORT_PACKAGE");
   }
 
+  for (const bytes of [manifestBytes, summaryBytes, markdown]) assertPublicBytes(bytes);
+
   const summaryHash = sha256Bytes(summaryBytes);
   const markdownHash = sha256Bytes(markdown);
   const manifest = ManifestSchema.parse(parseJson(manifestBytes, "INVALID_MANIFEST_JSON"));
@@ -151,6 +181,11 @@ export async function loadSiteRepository(root: string): Promise<SiteRepository> 
   }
 
   const files = await inventorySafeFiles(repositoryRoot);
+  for (const path of files) {
+    if (path.startsWith("reports/") && path !== "reports/.gitkeep" && !REPORT_FILE_PATTERN.test(path)) {
+      throw failure("UNEXPECTED_REPORT_PATH");
+    }
+  }
   const manifestPaths = files.filter((path) =>
     /^reports\/[a-z0-9-]+\/\d{4}-\d{2}-\d{2}\/\d{8}-\d{6}-[a-f0-9]{8,64}\/manifest\.json$/.test(
       path
@@ -167,6 +202,8 @@ export async function loadSiteRepository(root: string): Promise<SiteRepository> 
   } catch {
     throw failure("MISSING_SITE_CONTRACT_FILE");
   }
+  assertPublicBytes(policyBytes);
+  assertPublicBytes(eventBytes);
 
   let policyInput: unknown;
   try {

@@ -50,6 +50,7 @@ interface ValidPackageObject {
   packagePath: string;
   blobIds: ReadonlyMap<string, string>;
   fingerprint: string;
+  manifest: Manifest;
 }
 
 const run = promisify(execFile);
@@ -150,7 +151,7 @@ async function validPackageObject(
     const fingerprint = sha256Bytes(
       Buffer.from(relativePaths.map((path) => `${path}\0${blobIds.get(path)}`).join("\0"))
     );
-    return { commit, packagePath, blobIds, fingerprint };
+    return { commit, packagePath, blobIds, fingerprint, manifest };
   } catch {
     return undefined;
   }
@@ -233,6 +234,77 @@ function safePublicReason(reason: string): boolean {
   );
 }
 
+async function hasPublishedEvent(
+  repoRoot: string,
+  commit: string,
+  manifest: Manifest
+): Promise<boolean> {
+  try {
+    const content = await git(repoRoot, ["show", `${commit}:publication-events.jsonl`]);
+    return content
+      .split("\n")
+      .filter(Boolean)
+      .map((line) => JSON.parse(line) as Record<string, unknown>)
+      .some(
+        (event) =>
+          event.type === "published" &&
+          event.version_id === manifest.version_id &&
+          event.source_tree_hash === manifest.source_tree_hash &&
+          event.report_route === manifest.report_route &&
+          event.download_route === manifest.download_route
+      );
+  } catch {
+    return false;
+  }
+}
+
+async function isExactPublicationCommit(
+  repoRoot: string,
+  baseCommit: string,
+  publicationCommit: string,
+  currentManifest: Manifest
+): Promise<boolean> {
+  if (
+    !(await gitSucceeds(repoRoot, [
+      "merge-base",
+      "--is-ancestor",
+      publicationCommit,
+      baseCommit
+    ]))
+  ) {
+    return false;
+  }
+
+  const commitLine = (await git(repoRoot, ["rev-list", "--parents", "-n", "1", publicationCommit]))
+    .split(" ")
+    .filter(Boolean);
+  if (commitLine.length < 1 || commitLine.length > 2) return false;
+
+  const publishedPackage = await validPackageObject(
+    repoRoot,
+    publicationCommit,
+    currentManifest.version_id
+  );
+  if (
+    !publishedPackage ||
+    publishedPackage.packagePath !== dirname(currentManifest.download_route.slice(1)) ||
+    publishedPackage.manifest.content_hash !== currentManifest.content_hash ||
+    publishedPackage.manifest.source_tree_hash !== currentManifest.source_tree_hash ||
+    publishedPackage.manifest.summary_sha256 !== currentManifest.summary_sha256 ||
+    publishedPackage.manifest.complete_report_sha256 !== currentManifest.complete_report_sha256 ||
+    !(await hasPublishedEvent(repoRoot, publicationCommit, currentManifest))
+  ) {
+    return false;
+  }
+
+  const parent = commitLine[1];
+  if (!parent) return true;
+  return (
+    (await packagePathAtCommit(repoRoot, parent, currentManifest.version_id)) === undefined &&
+    !(await hasPublishedEvent(repoRoot, parent, currentManifest))
+  );
+}
+
 function withdrawalEvent(
   target: WithdrawalTarget,
   manifest: Manifest,
@@ -295,20 +367,20 @@ export async function prepareWithdrawal(input: WithdrawalInput): Promise<Mainten
     const timestamp = new Date().toISOString();
     const newEvents: Record<string, unknown>[] = [];
     for (const target of input.targets) {
-      if (
-        !(await gitSucceeds(input.repoRoot, [
-          "merge-base",
-          "--is-ancestor",
-          target.publicationCommit,
-          input.baseCommit
-        ]))
-      ) {
-        throw failure("INVALID_PUBLICATION_COMMIT");
-      }
       const loadedPackage = repository.packages.get(target.versionId);
       const state = versionStates.find((version) => version.versionId === target.versionId);
       if (!loadedPackage || !state || state.status !== "current") {
         throw failure("INVALID_WITHDRAWAL_TARGET");
+      }
+      if (
+        !(await isExactPublicationCommit(
+          input.repoRoot,
+          input.baseCommit,
+          target.publicationCommit,
+          loadedPackage.manifest
+        ))
+      ) {
+        throw failure("INVALID_PUBLICATION_COMMIT");
       }
       newEvents.push(withdrawalEvent(target, loadedPackage.manifest, timestamp));
       if (target.mode === "emergency") {

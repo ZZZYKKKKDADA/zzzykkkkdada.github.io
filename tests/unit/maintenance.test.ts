@@ -44,6 +44,27 @@ describe("maintenance candidates", () => {
     );
   });
 
+  it("rejects an ancestor that did not publish the target version", async () => {
+    const input = await makeMaintenanceRepo("partial-policy-withdrawal");
+    await expect(
+      prepareWithdrawal({
+        ...input,
+        targets: [
+          {
+            ...input.targets[0],
+            publicationCommit: input.prePublicationCommit
+          },
+          {
+            versionId: "20260712-120000-bbbbbbbb",
+            publicationCommit: input.baseCommit,
+            mode: "emergency" as const,
+            publicReason: "来源许可状态变化"
+          }
+        ]
+      })
+    ).rejects.toThrow("INVALID_PUBLICATION_COMMIT");
+  });
+
   it("builds a complete emergency-withdrawal candidate without mutating the source", async () => {
     const input = await makeMaintenanceRepo("partial-policy-withdrawal");
     const result = await prepareWithdrawal({

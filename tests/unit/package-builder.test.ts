@@ -31,6 +31,34 @@ describe("immutable package builder", () => {
     );
   });
 
+  it("excludes stale draft identity fields from public-content identity", async () => {
+    const firstRoot = await copyFixture("valid");
+    const secondRoot = await copyFixture("valid");
+    const first = await buildPackage({
+      ...ordinaryInput,
+      siteRoot: firstRoot,
+      sourceTreeHash: HASH_C
+    });
+    const second = await buildPackage({
+      ...ordinaryInput,
+      siteRoot: secondRoot,
+      sourceTreeHash: HASH_C,
+      summaryDraft: {
+        ...ordinaryInput.summaryDraft,
+        source_tree_hash: "d".repeat(64),
+        report_route: "/stocks/stale/2026-01-01/20260101-000000-dddddddd/",
+        download_route:
+          "/reports/stale/2026-01-01/20260101-000000-dddddddd/complete_report.md"
+      }
+    });
+    expect(first.kind).toBe("created");
+    expect(second.kind).toBe("created");
+    if (first.kind !== "created" || second.kind !== "created") {
+      throw new Error("expected created packages");
+    }
+    expect(second.contentHash).toBe(first.contentHash);
+  });
+
   it("requires an explicit current-leaf correction target", async () => {
     await expect(
       buildPackage({ ...correctionInput, supersedes: "old-non-leaf" })

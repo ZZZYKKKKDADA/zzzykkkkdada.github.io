@@ -13,28 +13,37 @@ const views = await buildSiteViews(process.env.REPORT_SITE_ROOT ?? process.cwd()
       <p>每份报告均为标注分析日期的历史快照，不代表当前观点。</p>
     </header>
 
-    <label for="stock-search">搜索股票</label>
-    <input
-      id="stock-search"
-      type="search"
-      name="stock-search"
-      placeholder="输入股票代码或公司名称"
-      autocomplete="off"
-    />
+    {views.tickers.length === 0 ? (
+      <div class="directory-empty" role="status">
+        <strong>目前还没有公开报告。</strong>
+        <p>新的研究档案发布后会出现在这里。</p>
+      </div>
+    ) : (
+      <>
+        <label for="stock-search">搜索股票</label>
+        <input
+          id="stock-search"
+          type="search"
+          name="stock-search"
+          placeholder="输入股票代码或公司名称"
+          autocomplete="off"
+        />
 
-    <p id="empty-search" hidden>没有匹配的公开报告。</p>
-    <ul id="stock-directory" aria-live="polite">
-      {views.tickers.map((ticker) => (
-        <li data-stock-row data-search={`${ticker.ticker} ${ticker.tickerSlug} ${ticker.company}`.toLowerCase()}>
-          <a href={`/stocks/${ticker.tickerSlug}/`}>
-            <strong>{ticker.company}</strong>
-            <span>{ticker.ticker}</span>
-            <span>{ticker.reports.length} 个公开版本</span>
-            {ticker.latest && <span>最近分析日 {ticker.latest.analysisDate}</span>}
-          </a>
-        </li>
-      ))}
-    </ul>
+        <p id="empty-search" hidden>没有匹配的公开报告。</p>
+        <ul id="stock-directory" aria-live="polite">
+          {views.tickers.map((ticker) => (
+            <li data-stock-row data-search={`${ticker.ticker} ${ticker.tickerSlug} ${ticker.company}`.toLowerCase()}>
+              <a href={`/stocks/${ticker.tickerSlug}/`}>
+                <strong>{ticker.company}</strong>
+                <span>{ticker.ticker}</span>
+                <span>{ticker.reports.length} 个公开版本</span>
+                {ticker.latest && <span>最近分析日 {ticker.latest.analysisDate}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
   </section>
 
   <script>

@@ -1,5 +1,6 @@
 node_modules/
 .astro/
 dist/
+dist-e2e/
 playwright-report/
 test-results/

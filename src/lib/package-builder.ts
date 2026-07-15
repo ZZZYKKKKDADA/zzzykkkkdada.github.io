@@ -25,7 +25,15 @@ export interface PackageBuildInput {
   sourceMarkdownPath: string;
   sourceTreeHash: string;
   sourceDisplayTimestamp: string;
-  summaryDraft: Omit<Summary, "version_id" | "content_hash" | "publication_date">;
+  summaryDraft: Omit<
+    Summary,
+    | "version_id"
+    | "content_hash"
+    | "publication_date"
+    | "source_tree_hash"
+    | "report_route"
+    | "download_route"
+  >;
   publicProvenance: Manifest["source_classes"];
   provenanceAttestationHash: string;
   supersedes?: string;
@@ -113,8 +121,17 @@ async function allocateVersion(
 }
 
 function publicPayload(input: PackageBuildInput): unknown {
+  const {
+    version_id: _versionId,
+    content_hash: _contentHash,
+    publication_date: _publicationDate,
+    source_tree_hash: _sourceTreeHash,
+    report_route: _reportRoute,
+    download_route: _downloadRoute,
+    ...summaryDraft
+  } = input.summaryDraft as Summary;
   return {
-    ...input.summaryDraft,
+    ...summaryDraft,
     source_tree_hash: input.sourceTreeHash,
     source_classes: input.publicProvenance,
     supersedes: input.mode === "correction" ? input.supersedes : undefined,

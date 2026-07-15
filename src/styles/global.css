@@ -200,6 +200,24 @@ time,
   color: var(--ink);
 }
 
+.directory-empty {
+  margin-top: 2rem;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+  padding: 1.5rem 0;
+}
+
+.directory-empty strong {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+}
+
+.directory-empty p {
+  margin: 0.3rem 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 #stock-directory,
 .ticker-timeline ol {
   margin: 2rem 0 0;

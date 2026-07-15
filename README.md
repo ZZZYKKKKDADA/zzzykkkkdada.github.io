@@ -31,7 +31,7 @@ npm run test:e2e
 npm run dev
 ```
 
-测试构建可通过 `REPORT_SITE_ROOT` 指向合成站点树。正式 Pages 部署不会设置该变量，只读取仓库根目录的公开输入。
+测试构建可通过 `REPORT_SITE_ROOT` 指向合成站点树。浏览器测试同时把合成输出隔离到 `dist-e2e/`，不会覆盖待审批的正式 `dist/`。正式 Pages 部署不会设置这些变量，只读取仓库根目录的公开输入。
 
 ## 发布规则
 

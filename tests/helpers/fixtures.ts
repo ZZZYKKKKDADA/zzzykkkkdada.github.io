@@ -238,11 +238,14 @@ export async function makeMaintenanceRepo(
   await run("git", ["init", "-b", "main"], { cwd: repoRoot });
 
   if (scenario === "partial-policy-withdrawal") {
+    await writeFile(join(repoRoot, "README.md"), "synthetic empty site baseline\n");
+    const prePublicationCommit = await commitAll(repoRoot, "empty site baseline");
     await cp(fixture("shared-provider/restricted"), repoRoot, { recursive: true });
     const baseCommit = await commitAll(repoRoot, "restricted public site");
     return {
       repoRoot,
       baseCommit,
+      prePublicationCommit,
       targets: [
         {
           versionId: validSummary.version_id,
