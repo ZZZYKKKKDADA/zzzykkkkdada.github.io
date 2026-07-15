@@ -17,7 +17,6 @@ export interface RepairInput {
   repoRoot: string;
   baseCommit: string;
   targetVersionIds: readonly string[];
-  impactReportHash: string;
 }
 
 export interface WithdrawalTarget {
@@ -31,7 +30,7 @@ export interface WithdrawalInput {
   repoRoot: string;
   baseCommit: string;
   targets: readonly WithdrawalTarget[];
-  candidatePolicyPath?: string;
+  safetyImpactReportHash: string | null;
 }
 
 export interface MaintenanceResult {
@@ -59,6 +58,18 @@ const HASH_PATTERN = /^[a-f0-9]{64}$/;
 function failure(code: string): Error {
   return new Error(code);
 }
+
+function hasOnlyKeys(input: object, allowed: ReadonlySet<string>): boolean {
+  return Object.keys(input).every((key) => allowed.has(key));
+}
+
+const REPAIR_INPUT_KEYS = new Set(["repoRoot", "baseCommit", "targetVersionIds"]);
+const WITHDRAWAL_INPUT_KEYS = new Set([
+  "repoRoot",
+  "baseCommit",
+  "targets",
+  "safetyImpactReportHash"
+]);
 
 async function git(repoRoot: string, args: readonly string[]): Promise<string> {
   const { stdout } = await run("git", [...args], {
@@ -185,7 +196,7 @@ async function canonicalDiffHash(candidateRoot: string): Promise<string> {
 }
 
 export async function prepareRepair(input: RepairInput): Promise<MaintenanceResult> {
-  if (!HASH_PATTERN.test(input.impactReportHash) || input.targetVersionIds.length === 0) {
+  if (!hasOnlyKeys(input, REPAIR_INPUT_KEYS) || input.targetVersionIds.length === 0) {
     throw failure("INVALID_REPAIR_INPUT");
   }
   if (new Set(input.targetVersionIds).size !== input.targetVersionIds.length) {
@@ -312,7 +323,7 @@ function withdrawalEvent(
 ): Record<string, unknown> {
   const reasonHash = sha256Bytes(Buffer.from(target.publicReason));
   return {
-    schema_version: 1,
+    schema_version: 2,
     event_id: `withdrawn-${target.versionId}-${reasonHash.slice(0, 12)}`,
     type: "withdrawn",
     mode: target.mode,
@@ -325,12 +336,19 @@ function withdrawalEvent(
     report_route: manifest.report_route,
     download_route: manifest.download_route,
     public_reason: target.publicReason,
-    source_classes: manifest.source_classes
+    publication_commit: target.publicationCommit
   };
 }
 
 export async function prepareWithdrawal(input: WithdrawalInput): Promise<MaintenanceResult> {
-  if (input.targets.length === 0) throw failure("INVALID_WITHDRAWAL_INPUT");
+  if (
+    !hasOnlyKeys(input, WITHDRAWAL_INPUT_KEYS) ||
+    input.targets.length === 0 ||
+    (input.safetyImpactReportHash !== null &&
+      !HASH_PATTERN.test(input.safetyImpactReportHash))
+  ) {
+    throw failure("INVALID_WITHDRAWAL_INPUT");
+  }
   if (new Set(input.targets.map((target) => target.versionId)).size !== input.targets.length) {
     throw failure("DUPLICATE_MAINTENANCE_TARGET");
   }
@@ -340,25 +358,30 @@ export async function prepareWithdrawal(input: WithdrawalInput): Promise<Mainten
 
   const candidateRoot = await createCandidateWorktree(input.repoRoot, input.baseCommit);
   try {
-    if (input.candidatePolicyPath) {
-      await writeFile(
-        join(candidateRoot, "config/publication-sources.yaml"),
-        await readFile(input.candidatePolicyPath)
-      );
-    }
     const impact = await auditSite(candidateRoot);
-    const affected = new Set(
-      impact.findings
-        .filter((item) => item.code === "SOURCE_POLICY_BLOCKED" && item.versionId)
-        .map((item) => item.versionId!)
-    );
-    const emergencyTargets = new Set(
-      input.targets
-        .filter((target) => target.mode === "emergency")
-        .map((target) => target.versionId)
-    );
-    if ([...affected].some((versionId) => !emergencyTargets.has(versionId))) {
-      throw failure("INCOMPLETE_IMPACT_SET");
+    if (input.safetyImpactReportHash !== null) {
+      if (impact.resultHash !== input.safetyImpactReportHash) {
+        throw failure("SAFETY_IMPACT_REPORT_MISMATCH");
+      }
+      const affected = new Set(
+        impact.findings
+          .filter(
+            (item) =>
+              item.requiredDisposition === "emergency_withdrawal" && item.versionId
+          )
+          .map((item) => item.versionId!)
+      );
+      const emergencyTargets = new Set(
+        input.targets
+          .filter((target) => target.mode === "emergency")
+          .map((target) => target.versionId)
+      );
+      if (
+        affected.size !== emergencyTargets.size ||
+        [...affected].some((versionId) => !emergencyTargets.has(versionId))
+      ) {
+        throw failure("INCOMPLETE_SAFETY_TARGET_SET");
+      }
     }
 
     const repository = await loadSiteRepository(candidateRoot);

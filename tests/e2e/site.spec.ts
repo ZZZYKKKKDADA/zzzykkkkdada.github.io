@@ -25,6 +25,17 @@ test("report page leads with history boundary and decision matrix", async ({ pag
   await expect(page.getByText("仅供研究交流，不构成个性化投资建议")).toBeVisible();
 });
 
+test("renders explicit metric evidence gaps without placeholders", async ({ page }) => {
+  await page.goto(validReportRoute);
+  const valuation = page.getByRole("region", { name: "估值指标" });
+  await expect(valuation.getByText("报告未提供足够的此类指标证据")).toBeVisible();
+  await expect(valuation.locator("dt")).toHaveCount(0);
+  await expect(page.getByText("示例值")).toHaveCount(0);
+  await expect(page.getByText("报告证据不足，暂不形成建议")).toBeVisible();
+  await expect(page.getByText("本页公开且可下载，noindex 不是访问控制。")).toBeVisible();
+  await expect(page.getByText("合成测试数据，不代表真实市场信息。")).toHaveCount(0);
+});
+
 test("complete report expands, anchors, and restores focus", async ({ page }) => {
   await page.goto(validReportRoute);
   const button = page.locator('button[aria-controls^="complete-report-"]');

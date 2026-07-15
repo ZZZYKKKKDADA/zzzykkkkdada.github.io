@@ -14,6 +14,7 @@ import { readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, resolve } from "node:path";
 import { promisify } from "node:util";
+import { auditSite } from "../../src/lib/site-audit";
 
 export const HASH_A = "a".repeat(64);
 export const HASH_B = "b".repeat(64);
@@ -71,13 +72,8 @@ export async function treeDigest(root: string): Promise<string> {
   return hash.digest("hex");
 }
 
-export async function makeSharedProviderSite(
-  state:
-    | "allowed"
-    | "restricted"
-    | "editorial-withdrawal"
-    | "partial-withdrawal"
-    | "complete-withdrawal"
+export async function makeTwoVersionSite(
+  state: "current" | "safety" | "editorial-withdrawal" | "complete-withdrawal"
 ): Promise<string> {
   const root = await copyFixture("valid");
   const packageA = join(
@@ -92,12 +88,28 @@ export async function makeSharedProviderSite(
   const markdown = await readFile(join(packageA, "complete_report.md"));
   await writeFile(join(packageB, "complete_report.md"), markdown);
 
+  let summaryA = validSummary;
+  if (state === "safety") {
+    summaryA = { ...validSummary, conclusion: "token: fixture-secret-value" };
+    const summaryABytes = Buffer.from(`${JSON.stringify(summaryA, null, 2)}\n`);
+    await writeFile(join(packageA, "summary.json"), summaryABytes);
+    await writeFile(
+      join(packageA, "manifest.json"),
+      `${JSON.stringify({
+        ...validManifest,
+        summary_sha256: createHash("sha256").update(summaryABytes).digest("hex")
+      }, null, 2)}\n`
+    );
+  }
+
   const summaryB = {
     ...validSummary,
     analysis_date: "2026-07-12",
     version_id: "20260712-120000-bbbbbbbb",
     source_tree_hash: HASH_B,
     content_hash: HASH_C,
+    conclusion:
+      state === "safety" ? "token: fixture-secret-value" : validSummary.conclusion,
     report_route: "/stocks/002050-sz/2026-07-12/20260712-120000-bbbbbbbb/",
     download_route:
       "/reports/002050-sz/2026-07-12/20260712-120000-bbbbbbbb/complete_report.md"
@@ -118,45 +130,9 @@ export async function makeSharedProviderSite(
   };
   await writeFile(join(packageB, "manifest.json"), `${JSON.stringify(manifestB, null, 2)}\n`);
 
-  const policy = {
-    schema_version: 1,
-    entries: [
-      {
-        id: "synthetic-local-v1",
-        source_class: "synthetic_local",
-        status:
-          state === "allowed" || state === "editorial-withdrawal"
-            ? "allowed"
-            : "restricted",
-        allowed_content_classes: ["derived_fact", "locally_authored_analysis"],
-        prohibited_content_classes: ["raw_payload"],
-        required_attribution: "合成测试数据，不代表真实市场信息。",
-        terms_url: "https://example.invalid/synthetic-source",
-        reviewed_on: "2026-07-14"
-      }
-    ]
-  };
-  const policyYaml = [
-    "schema_version: 1",
-    "entries:",
-    "  - id: synthetic-local-v1",
-    "    source_class: synthetic_local",
-    `    status: ${policy.entries[0].status}`,
-    "    allowed_content_classes:",
-    "      - derived_fact",
-    "      - locally_authored_analysis",
-    "    prohibited_content_classes:",
-    "      - raw_payload",
-    "    required_attribution: 合成测试数据，不代表真实市场信息。",
-    "    terms_url: https://example.invalid/synthetic-source",
-    "    reviewed_on: 2026-07-14",
-    ""
-  ].join("\n");
-  await writeFile(join(root, "config/publication-sources.yaml"), policyYaml);
-
   const publishedA = publishedV1;
   const publishedB = {
-    schema_version: 1,
+    schema_version: 2,
     event_id: "event-published-v2",
     type: "published",
     timestamp: "2026-07-14T09:00:00Z",
@@ -170,15 +146,20 @@ export async function makeSharedProviderSite(
   if (state === "editorial-withdrawal") {
     eventLines.push(editorialWithdrawal);
   }
-  if (state === "partial-withdrawal" || state === "complete-withdrawal") {
-    await rm(packageA, { recursive: true });
-    eventLines.push(editorialToEmergency(editorialWithdrawal, "event-emergency-v1"));
-  }
   if (state === "complete-withdrawal") {
+    await rm(packageA, { recursive: true });
     await rm(packageB, { recursive: true });
     eventLines.push({
-      ...editorialToEmergency(emergencyWithdrawal, "event-emergency-v2"),
-      source_tree_hash: summaryB.source_tree_hash
+      ...editorialWithdrawal,
+      event_id: "event-emergency-v1",
+      mode: "emergency",
+      public_reason: "公开内容安全复核后撤下"
+    });
+    eventLines.push({
+      ...emergencyWithdrawal,
+      event_id: "event-emergency-v2",
+      source_tree_hash: summaryB.source_tree_hash,
+      public_reason: "公开内容安全复核后撤下"
     });
   }
   await writeFile(
@@ -186,15 +167,6 @@ export async function makeSharedProviderSite(
     `${eventLines.map((event) => JSON.stringify(event)).join("\n")}\n`
   );
   return root;
-}
-
-function editorialToEmergency(event: any, eventId: string): any {
-  return {
-    ...event,
-    event_id: eventId,
-    mode: "emergency",
-    public_reason: "来源许可状态变化"
-  };
 }
 
 export const siteRoot = fixture("valid");
@@ -207,9 +179,7 @@ export const ordinaryInput = {
   sourceMarkdownPath: join(validPackage, "complete_report.md"),
   sourceTreeHash: existingHash,
   sourceDisplayTimestamp: "20260713_215103",
-  summaryDraft,
-  publicProvenance: validManifest.source_classes,
-  provenanceAttestationHash: HASH_B
+  summaryDraft
 };
 export const correctionInput = {
   ...ordinaryInput,
@@ -232,29 +202,31 @@ async function commitAll(repoRoot: string, message: string): Promise<string> {
 }
 
 export async function makeMaintenanceRepo(
-  scenario: "repairable" | "ambiguous" | "partial-policy-withdrawal"
+  scenario: "repairable" | "ambiguous" | "partial-safety-withdrawal"
 ): Promise<any> {
   const repoRoot = await mkdtemp(join(tmpdir(), "public-report-maintenance-source-"));
   await run("git", ["init", "-b", "main"], { cwd: repoRoot });
 
-  if (scenario === "partial-policy-withdrawal") {
+  if (scenario === "partial-safety-withdrawal") {
     await writeFile(join(repoRoot, "README.md"), "synthetic empty site baseline\n");
     const prePublicationCommit = await commitAll(repoRoot, "empty site baseline");
-    await cp(fixture("shared-provider/restricted"), repoRoot, { recursive: true });
-    const baseCommit = await commitAll(repoRoot, "restricted public site");
+    const safetySite = await makeTwoVersionSite("safety");
+    await cp(safetySite, repoRoot, { recursive: true });
+    const baseCommit = await commitAll(repoRoot, "unsafe public site");
+    const safetyImpactReportHash = (await auditSite(repoRoot)).resultHash;
     return {
       repoRoot,
       baseCommit,
       prePublicationCommit,
+      safetyImpactReportHash,
       targets: [
         {
           versionId: validSummary.version_id,
           publicationCommit: baseCommit,
           mode: "emergency" as const,
-          publicReason: "来源许可状态变化"
+          publicReason: "公开内容安全复核后撤下"
         }
-      ],
-      candidatePolicyPath: join(repoRoot, "config/publication-sources.yaml")
+      ]
     };
   }
 
@@ -284,8 +256,7 @@ export async function makeMaintenanceRepo(
   const repairInput = {
     repoRoot,
     baseCommit,
-    targetVersionIds: [validSummary.version_id],
-    impactReportHash: HASH_A
+    targetVersionIds: [validSummary.version_id]
   };
   if (scenario === "ambiguous") return repairInput;
   return {

@@ -11,7 +11,6 @@ import { dirname, join } from "node:path";
 import {
   ManifestSchema,
   SummarySchema,
-  type Manifest,
   type Summary
 } from "./contracts";
 import { sha256Bytes } from "./crypto";
@@ -34,8 +33,6 @@ export interface PackageBuildInput {
     | "report_route"
     | "download_route"
   >;
-  publicProvenance: Manifest["source_classes"];
-  provenanceAttestationHash: string;
   supersedes?: string;
   correctionReason?: string;
 }
@@ -49,7 +46,6 @@ const TIMESTAMP_PATTERN = /^\d{8}_\d{6}$/;
 const IDENTITY_EXCLUDED_KEYS = new Set([
   "content_hash",
   "event_id",
-  "provenance_attestation_hash",
   "publication_date",
   "publisher_version",
   "sourceDisplayTimestamp",
@@ -60,6 +56,30 @@ const IDENTITY_EXCLUDED_KEYS = new Set([
 
 function failure(code: string): Error {
   return new Error(code);
+}
+
+const PACKAGE_INPUT_KEYS = new Set([
+  "mode",
+  "siteRoot",
+  "sourceMarkdownPath",
+  "sourceTreeHash",
+  "sourceDisplayTimestamp",
+  "summaryDraft",
+  "supersedes",
+  "correctionReason"
+]);
+
+function assertPackageInput(input: PackageBuildInput): void {
+  if (Object.keys(input).some((key) => !PACKAGE_INPUT_KEYS.has(key))) {
+    throw failure("INVALID_PACKAGE_INPUT");
+  }
+  if (
+    (input.mode !== "publication" && input.mode !== "correction") ||
+    (input.mode === "publication" &&
+      (input.supersedes !== undefined || input.correctionReason !== undefined))
+  ) {
+    throw failure("INVALID_PACKAGE_INPUT");
+  }
 }
 
 function canonicalize(value: unknown): string {
@@ -133,9 +153,8 @@ function publicPayload(input: PackageBuildInput): unknown {
   return {
     ...summaryDraft,
     source_tree_hash: input.sourceTreeHash,
-    source_classes: input.publicProvenance,
-    supersedes: input.mode === "correction" ? input.supersedes : undefined,
-    correction_reason: input.mode === "correction" ? input.correctionReason : undefined
+    supersedes: input.mode === "correction" ? input.supersedes : null,
+    correction_reason: input.mode === "correction" ? input.correctionReason : null
   };
 }
 
@@ -144,7 +163,8 @@ function eventId(type: string, versionId: string, contentHash: string): string {
 }
 
 export async function buildPackage(input: PackageBuildInput): Promise<PackageBuildResult> {
-  if (!HASH_PATTERN.test(input.sourceTreeHash) || !HASH_PATTERN.test(input.provenanceAttestationHash)) {
+  assertPackageInput(input);
+  if (!HASH_PATTERN.test(input.sourceTreeHash)) {
     throw failure("INVALID_PACKAGE_HASH");
   }
   if (!TIMESTAMP_PATTERN.test(input.sourceDisplayTimestamp)) {
@@ -217,7 +237,7 @@ export async function buildPackage(input: PackageBuildInput): Promise<PackageBui
   const correctionFields =
     input.mode === "correction"
       ? { supersedes: input.supersedes, correction_reason: input.correctionReason }
-      : {};
+      : { supersedes: null, correction_reason: null };
   const summary = SummarySchema.parse({
     ...input.summaryDraft,
     ...correctionFields,
@@ -231,7 +251,7 @@ export async function buildPackage(input: PackageBuildInput): Promise<PackageBui
   const markdown = await readFile(input.sourceMarkdownPath);
   const summaryBytes = Buffer.from(`${JSON.stringify(summary, null, 2)}\n`, "utf8");
   const manifest = ManifestSchema.parse({
-    schema_version: 1,
+    schema_version: 2,
     ticker: summary.ticker,
     ticker_slug: summary.ticker_slug,
     company: summary.company,
@@ -245,8 +265,6 @@ export async function buildPackage(input: PackageBuildInput): Promise<PackageBui
     summary_sha256: sha256Bytes(summaryBytes),
     complete_report_sha256: sha256Bytes(markdown),
     publisher_version: "0.1.0",
-    provenance_attestation_hash: input.provenanceAttestationHash,
-    source_classes: input.publicProvenance,
     ...correctionFields,
     report_route: reportRoute,
     download_route: downloadRoute
@@ -257,7 +275,7 @@ export async function buildPackage(input: PackageBuildInput): Promise<PackageBui
   const timestamp = new Date().toISOString();
   const newEvents: unknown[] = [
     {
-      schema_version: 1,
+      schema_version: 2,
       event_id: eventId("published", allocation.versionId, contentHash),
       type: "published",
       timestamp,
@@ -269,7 +287,7 @@ export async function buildPackage(input: PackageBuildInput): Promise<PackageBui
   ];
   if (input.mode === "correction" && input.supersedes && input.correctionReason) {
     newEvents.push({
-      schema_version: 1,
+      schema_version: 2,
       event_id: eventId("superseded", input.supersedes, contentHash),
       type: "superseded",
       timestamp,

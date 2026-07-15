@@ -4,8 +4,10 @@
   "type": "module",
   "scripts": {
     "audit": "tsx scripts/audit-site.ts",
+    "audit:dist": "tsx scripts/audit-built-artifact.ts",
     "check": "astro check",
     "test": "vitest run",
+    "test:stale": "tsx scripts/check-stale-schema.ts",
     "test:e2e": "playwright test",
     "build": "npm run audit && astro build",
     "dev": "astro dev",
@@ -20,7 +22,6 @@
     "remark-parse": "11.0.0",
     "remark-rehype": "11.1.2",
     "unified": "11.0.5",
-    "yaml": "2.9.0",
     "zod": "4.4.3"
   },
   "devDependencies": {

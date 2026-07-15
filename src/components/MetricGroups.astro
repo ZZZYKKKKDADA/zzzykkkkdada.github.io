@@ -14,21 +14,29 @@ const { groups } = Astro.props;
     <h2 id="metric-title">指标分析</h2>
   </header>
   {groups.map((group) => (
-    <section aria-labelledby={`metric-${group.group}`}>
-      <h3 id={`metric-${group.group}`}>{group.label}</h3>
-      <dl>
-        {group.metrics.map((metric) => (
-          <div>
-            <dt>{metric.name}</dt>
-            <dd>
-              <strong>{metric.source_value} {metric.unit}</strong>
-              {metric.as_of_date && <time datetime={metric.as_of_date}>{metric.as_of_date}</time>}
-              <p>{metric.interpretation}</p>
-              <p>{metric.decision_impact}</p>
-            </dd>
-          </div>
-        ))}
-      </dl>
+    <section
+      role="region"
+      aria-label={`${group.label}指标`}
+      aria-labelledby={`metric-${group.group}`}
+    >
+      <h3 id={`metric-${group.group}`}>{group.label}指标</h3>
+      {group.status === "insufficient_evidence" ? (
+        <p class="metric-insufficient">报告未提供足够的此类指标证据</p>
+      ) : (
+        <dl>
+          {group.metrics.map((metric) => (
+            <div>
+              <dt>{metric.name}</dt>
+              <dd>
+                <strong>{metric.source_value} {metric.unit}</strong>
+                {metric.as_of_date && <time datetime={metric.as_of_date}>{metric.as_of_date}</time>}
+                <p>{metric.interpretation}</p>
+                <p>{metric.decision_impact}</p>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </section>
   ))}
 </section>

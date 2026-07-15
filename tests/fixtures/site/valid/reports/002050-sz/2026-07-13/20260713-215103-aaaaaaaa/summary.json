@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002050.SZ",
   "ticker_slug": "002050-sz",
   "company": "三花智控",
@@ -9,6 +9,8 @@
   "version_id": "20260713-215103-aaaaaaaa",
   "source_tree_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "content_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "supersedes": null,
+  "correction_reason": null,
   "rating": "Hold",
   "conclusion": "合成报告证据有限，当前仅形成观望结论。",
   "advice_matrix": [
@@ -17,7 +19,7 @@
       "cells": [
         { "style": "short_aggressive", "action": "等待条件触发后再评估", "action_class": "conditional_enter", "conditions": ["合成触发条件成立"], "risk": "证据不足" },
         { "style": "short_conservative", "action": "暂不介入", "action_class": "avoid", "conditions": [], "risk": "合成波动风险" },
-        { "style": "long_aggressive", "action": "等待更多证据", "action_class": "insufficient_evidence", "conditions": ["补充长期证据"], "risk": "长期假设未验证" },
+        { "style": "long_aggressive", "action": "报告证据不足，暂不形成建议", "action_class": "insufficient_evidence", "conditions": [], "risk": "长期假设未验证" },
         { "style": "long_conservative", "action": "继续观察", "action_class": "avoid", "conditions": [], "risk": "安全边际未知" }
       ]
     },
@@ -53,31 +55,49 @@
     {
       "group": "trend",
       "label": "趋势",
+      "status": "supported",
       "metrics": [
         {
           "name": "合成趋势值",
-          "source_value": "1.00",
-          "unit": "测试单位",
+          "source_value": "fixture-1.00",
+          "unit": "fixture-unit",
           "as_of_date": "2026-07-13",
           "interpretation": "仅验证指标展示结构。",
           "decision_impact": "不构成真实决策依据。"
         }
       ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "insufficient_evidence",
+      "metrics": []
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "insufficient_evidence",
+      "metrics": []
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "insufficient_evidence",
+      "metrics": []
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "insufficient_evidence",
+      "metrics": []
     }
   ],
   "disclaimer": {
     "historical_boundary": "本页是截至2026年7月13日的历史研究快照。",
     "ai_assisted": "内容由AI辅助整理并经过结构化校验。",
-    "not_investment_advice": "内容仅供研究交流，不构成投资建议。"
+    "not_investment_advice": "内容仅供研究交流，不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex 不是访问控制。"
   },
-  "attributions": [
-    {
-      "source_class": "synthetic_local",
-      "text": "合成测试数据，不代表真实市场信息。",
-      "url": "https://example.invalid/synthetic-source",
-      "policy_entry_id": "synthetic-local-v1"
-    }
-  ],
   "report_route": "/stocks/002050-sz/2026-07-13/20260713-215103-aaaaaaaa/",
   "download_route": "/reports/002050-sz/2026-07-13/20260713-215103-aaaaaaaa/complete_report.md"
 }

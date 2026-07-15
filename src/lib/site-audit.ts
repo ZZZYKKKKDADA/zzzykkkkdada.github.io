@@ -1,19 +1,18 @@
 import { resolve } from "node:path";
 import type { Manifest } from "./contracts";
-import {
-  replayAllLineages,
-  type LifecycleStatus,
-  type LineageState
-} from "./lifecycle";
-import { evaluateSourceClasses } from "./policy";
+import { sha256Bytes } from "./crypto";
+import { replayAllLineages, type LineageState } from "./lifecycle";
+import { renderSafeMarkdown } from "./markdown";
+import { PUBLIC_CONTENT_SCANNER_VERSION } from "./public-content-scan";
 import { loadSiteRepository } from "./repository";
 
 export interface AuditFinding {
   code: string;
   versionId?: string;
   route?: string;
-  sourceClass?: string;
-  policyEntryId?: string;
+  file?: string;
+  ruleId?: string;
+  matchHash?: string;
   requiredDisposition: "repair" | "emergency_withdrawal";
 }
 
@@ -21,6 +20,8 @@ export interface SiteAuditResult {
   ok: boolean;
   auditedAt: string;
   treeRoot: string;
+  scannerVersion: string;
+  resultHash: string;
   findings: readonly AuditFinding[];
 }
 
@@ -55,7 +56,9 @@ const SAFE_INTEGRITY_CODES = new Set([
   "SERVED_PACKAGE_MISSING",
   "ORPHAN_REPORT_PACKAGE",
   "UNEXPECTED_REPORT_PATH",
-  "UNSAFE_PUBLIC_CONTENT"
+  "UNSAFE_PUBLIC_CONTENT",
+  "OBSOLETE_POLICY_FILE",
+  "UNSAFE_RENDERED_MARKDOWN"
 ]);
 
 function safeIntegrityCode(error: unknown): string {
@@ -68,8 +71,9 @@ function stableFindings(findings: AuditFinding[]): AuditFinding[] {
     [
       left.versionId ?? "",
       left.route ?? "",
-      left.sourceClass ?? "",
-      left.policyEntryId ?? "",
+      left.file ?? "",
+      left.ruleId ?? "",
+      left.matchHash ?? "",
       left.code
     ]
       .join("\0")
@@ -77,13 +81,42 @@ function stableFindings(findings: AuditFinding[]): AuditFinding[] {
         [
           right.versionId ?? "",
           right.route ?? "",
-          right.sourceClass ?? "",
-          right.policyEntryId ?? "",
+          right.file ?? "",
+          right.ruleId ?? "",
+          right.matchHash ?? "",
           right.code
         ].join("\0"),
         "en"
       )
   );
+}
+
+function resultHash(findings: readonly AuditFinding[]): string {
+  return sha256Bytes(
+    Buffer.from(
+      JSON.stringify({
+        scannerVersion: PUBLIC_CONTENT_SCANNER_VERSION,
+        findings
+      }),
+      "utf8"
+    )
+  );
+}
+
+function auditResult(
+  treeRoot: string,
+  auditedAt: string,
+  findings: AuditFinding[]
+): SiteAuditResult {
+  const sorted = stableFindings(findings);
+  return {
+    ok: sorted.length === 0,
+    auditedAt,
+    treeRoot,
+    scannerVersion: PUBLIC_CONTENT_SCANNER_VERSION,
+    resultHash: resultHash(sorted),
+    findings: sorted
+  };
 }
 
 function findDuplicateRoutes(
@@ -142,52 +175,62 @@ export async function auditSite(root: string): Promise<SiteAuditResult> {
   try {
     const repository = await loadSiteRepository(treeRoot);
     const lineages = replayAllLineages(repository);
-    const statuses = new Map<string, LifecycleStatus>();
-    for (const lineage of lineages.values()) {
-      for (const version of lineage.versions) statuses.set(version.versionId, version.status);
-    }
 
     const findings: AuditFinding[] = [
       ...findDuplicateRoutes(repository.packages),
       ...findDuplicateLifecycleRoutes(lineages)
     ];
     for (const [versionId, loadedPackage] of repository.packages) {
-      if (statuses.get(versionId) === "emergency_withdrawn") continue;
-      findings.push(
-        ...evaluateSourceClasses(versionId, loadedPackage.manifest.source_classes, repository.policy)
-      );
-    }
-
-    for (const event of repository.events) {
-      if (event.type !== "withdrawn" || event.mode !== "emergency") continue;
-      const tombstoneFindings = evaluateSourceClasses(
-        event.version_id,
-        event.source_classes,
-        repository.policy,
-        { allowRestrictedStatus: true }
-      );
-      findings.push(
-        ...tombstoneFindings.map((item) => ({
-          ...item,
-          code: `TOMBSTONE_${item.code}`,
-          route: event.report_route
-        }))
-      );
-    }
-
-    const sorted = stableFindings(findings);
-    return { ok: sorted.length === 0, auditedAt, treeRoot, findings: sorted };
-  } catch (error) {
-    return {
-      ok: false,
-      auditedAt,
-      treeRoot,
-      findings: [
-        {
-          code: safeIntegrityCode(error),
-          requiredDisposition: "repair"
+      for (const item of loadedPackage.publicContentFindings) {
+        findings.push({
+          code: "UNSAFE_PUBLIC_CONTENT",
+          versionId,
+          route: loadedPackage.manifest.report_route,
+          file: item.file,
+          ruleId: item.ruleId,
+          matchHash: item.matchHash,
+          requiredDisposition: "emergency_withdrawal"
+        });
+      }
+      try {
+        const rendered = await renderSafeMarkdown(loadedPackage.markdown);
+        if (/<(?:script|iframe|object|embed|form|svg)\b|(?:javascript|data):/iu.test(rendered.html)) {
+          findings.push({
+            code: "UNSAFE_RENDERED_MARKDOWN",
+            versionId,
+            route: loadedPackage.manifest.report_route,
+            file: `${loadedPackage.manifest.download_route.slice(1)}`,
+            requiredDisposition: "emergency_withdrawal"
+          });
         }
-      ]
-    };
+      } catch {
+        findings.push({
+          code: "UNSAFE_RENDERED_MARKDOWN",
+          versionId,
+          route: loadedPackage.manifest.report_route,
+          file: `${loadedPackage.manifest.download_route.slice(1)}`,
+          requiredDisposition: "emergency_withdrawal"
+        });
+      }
+    }
+    for (const item of repository.eventContentFindings) {
+      findings.push({
+        code: "UNSAFE_PUBLIC_CONTENT",
+        versionId: item.versionId,
+        route: item.route,
+        file: item.finding.file,
+        ruleId: item.finding.ruleId,
+        matchHash: item.finding.matchHash,
+        requiredDisposition: "emergency_withdrawal"
+      });
+    }
+    return auditResult(treeRoot, auditedAt, findings);
+  } catch (error) {
+    return auditResult(treeRoot, auditedAt, [
+      {
+        code: safeIntegrityCode(error),
+        requiredDisposition: "repair"
+      }
+    ]);
   }
 }

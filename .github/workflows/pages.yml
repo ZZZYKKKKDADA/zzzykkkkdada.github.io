@@ -30,7 +30,11 @@ jobs:
       - run: npm run audit
       - run: npm run check
       - run: npm test
+      - run: npm run test:stale
       - run: npm run build
+      - run: npm run audit:dist
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:e2e
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

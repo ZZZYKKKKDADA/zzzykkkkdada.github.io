@@ -10,21 +10,28 @@ import { auditSite } from "../../src/lib/site-audit";
 
 const run = promisify(execFile);
 
+function withdrawalInput(input: any) {
+  return {
+    repoRoot: input.repoRoot,
+    baseCommit: input.baseCommit,
+    targets: input.targets,
+    safetyImpactReportHash: input.safetyImpactReportHash
+  };
+}
+
 describe("maintenance candidates", () => {
   it("restores only exact blobs from one unique valid ancestor", async () => {
     const {
       repoRoot,
       baseCommit,
       versionId,
-      impactReportHash,
       expectedBlobId,
       expectedPackagePaths
     } = await makeMaintenanceRepo("repairable");
     const result = await prepareRepair({
       repoRoot,
       baseCommit,
-      targetVersionIds: [versionId],
-      impactReportHash
+      targetVersionIds: [versionId]
     });
     expect(result.restoredBlobIds).toEqual([expectedBlobId]);
     expect(result.changedPaths).toEqual(expectedPackagePaths);
@@ -37,18 +44,25 @@ describe("maintenance candidates", () => {
     await expect(prepareRepair(ambiguousInput)).rejects.toThrow("NOT_REPAIRABLE");
   });
 
-  it("requires every provider-affected package in an emergency policy candidate", async () => {
-    const partialPolicyInput = await makeMaintenanceRepo("partial-policy-withdrawal");
-    await expect(prepareWithdrawal(partialPolicyInput)).rejects.toThrow(
-      "INCOMPLETE_IMPACT_SET"
+  it("rejects a partial deterministic safety target set", async () => {
+    const input = await makeMaintenanceRepo("partial-safety-withdrawal");
+    await expect(prepareWithdrawal(withdrawalInput(input))).rejects.toThrow(
+      "INCOMPLETE_SAFETY_TARGET_SET"
     );
   });
 
+  it("rejects obsolete policy mutation input", async () => {
+    const input = await makeMaintenanceRepo("partial-safety-withdrawal");
+    await expect(
+      prepareWithdrawal({ ...input, candidatePolicyPath: "/tmp/policy.yaml" } as never)
+    ).rejects.toThrow("INVALID_WITHDRAWAL_INPUT");
+  });
+
   it("rejects an ancestor that did not publish the target version", async () => {
-    const input = await makeMaintenanceRepo("partial-policy-withdrawal");
+    const input = await makeMaintenanceRepo("partial-safety-withdrawal");
     await expect(
       prepareWithdrawal({
-        ...input,
+        ...withdrawalInput(input),
         targets: [
           {
             ...input.targets[0],
@@ -58,7 +72,7 @@ describe("maintenance candidates", () => {
             versionId: "20260712-120000-bbbbbbbb",
             publicationCommit: input.baseCommit,
             mode: "emergency" as const,
-            publicReason: "来源许可状态变化"
+            publicReason: "公开内容安全复核后撤下"
           }
         ]
       })
@@ -66,16 +80,16 @@ describe("maintenance candidates", () => {
   });
 
   it("builds a complete emergency-withdrawal candidate without mutating the source", async () => {
-    const input = await makeMaintenanceRepo("partial-policy-withdrawal");
+    const input = await makeMaintenanceRepo("partial-safety-withdrawal");
     const result = await prepareWithdrawal({
-      ...input,
+      ...withdrawalInput(input),
       targets: [
         ...input.targets,
         {
           versionId: "20260712-120000-bbbbbbbb",
           publicationCommit: input.baseCommit,
           mode: "emergency" as const,
-          publicReason: "来源许可状态变化"
+          publicReason: "公开内容安全复核后撤下"
         }
       ]
     });

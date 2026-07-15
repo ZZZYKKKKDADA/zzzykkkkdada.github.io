@@ -1,14 +1,9 @@
 import { z } from "zod";
 
 const Sha256Schema = z.string().regex(/^[a-f0-9]{64}$/);
+const CommitHashSchema = z.string().regex(/^[a-f0-9]{40}$/);
 const TickerSlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(80);
 const VersionIdSchema = z.string().regex(/^\d{8}-\d{6}-[a-f0-9]{8,64}$/);
-const SourceClassNameSchema = z.string().regex(/^[a-z0-9]+(?:_[a-z0-9]+)*$/).max(80);
-const PolicyEntryIdSchema = z.string().regex(/^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$/).max(120);
-const ContentClassSchema = z.string().regex(/^[a-z0-9]+(?:_[a-z0-9]+)*$/).max(80);
-const HttpUrlSchema = z
-  .url()
-  .refine((value) => value.startsWith("https://") || value.startsWith("http://"));
 
 function safePath(value: string): boolean {
   return (
@@ -73,6 +68,13 @@ export const ActionClassSchema = z.enum([
   "insufficient_evidence"
 ]);
 
+const INSUFFICIENT_ADVICE = "报告证据不足，暂不形成建议";
+const PLACEHOLDER_VALUES = new Set(["示例值", "n/a", "unknown", "未知", "待补充"]);
+
+function isPlaceholder(value: string): boolean {
+  return PLACEHOLDER_VALUES.has(value.trim().toLowerCase());
+}
+
 export const AdviceCellSchema = z
   .object({
     style: StyleSchema,
@@ -81,7 +83,24 @@ export const AdviceCellSchema = z
     conditions: z.array(z.string().min(1).max(180)).max(4),
     risk: z.string().min(1).max(180)
   })
-  .strict();
+  .strict()
+  .superRefine((cell, context) => {
+    if (cell.action_class !== "insufficient_evidence") return;
+    if (cell.action !== INSUFFICIENT_ADVICE) {
+      context.addIssue({
+        code: "custom",
+        path: ["action"],
+        message: "invalid insufficient-evidence action"
+      });
+    }
+    if (cell.conditions.length !== 0) {
+      context.addIssue({
+        code: "custom",
+        path: ["conditions"],
+        message: "insufficient evidence cannot carry conditions"
+      });
+    }
+  });
 
 export const AdviceRowSchema = z
   .object({
@@ -101,9 +120,9 @@ export const AdviceRowSchema = z
 
 const MetricSchema = z
   .object({
-    name: z.string().min(1).max(100),
-    source_value: z.string().min(1).max(120),
-    unit: z.string().min(1).max(40),
+    name: z.string().min(1).max(100).refine((value) => !isPlaceholder(value)),
+    source_value: z.string().min(1).max(120).refine((value) => !isPlaceholder(value)),
+    unit: z.string().min(1).max(40).refine((value) => !isPlaceholder(value)),
     as_of_date: z.iso.date().optional(),
     interpretation: z.string().min(1).max(240),
     decision_impact: z.string().min(1).max(240)
@@ -118,45 +137,25 @@ const MetricGroupNameSchema = z.enum([
   "capital_risk"
 ]);
 
-const MetricGroupSchema = z
-  .object({
-    group: MetricGroupNameSchema,
-    label: z.string().min(1).max(40),
+const MetricGroupBaseSchema = z.object({
+  group: MetricGroupNameSchema,
+  label: z.string().min(1).max(40)
+});
+
+const MetricGroupSchema = z.discriminatedUnion("status", [
+  MetricGroupBaseSchema.extend({
+    status: z.literal("supported"),
     metrics: z.array(MetricSchema).min(1).max(12)
-  })
-  .strict();
-
-const AttributionSchema = z
-  .object({
-    source_class: SourceClassNameSchema,
-    text: z.string().min(1).max(300),
-    url: HttpUrlSchema,
-    policy_entry_id: PolicyEntryIdSchema
-  })
-  .strict();
-
-const PublicSourceClassSchema = z
-  .object({
-    source_class: SourceClassNameSchema,
-    content_classes: z.array(ContentClassSchema).min(1).max(20),
-    attribution_text: z.string().min(1).max(300),
-    terms_url: HttpUrlSchema,
-    policy_entry_id: PolicyEntryIdSchema
-  })
-  .strict()
-  .superRefine((value, context) => {
-    if (new Set(value.content_classes).size !== value.content_classes.length) {
-      context.addIssue({
-        code: "custom",
-        path: ["content_classes"],
-        message: "content classes must be unique"
-      });
-    }
-  });
+  }).strict(),
+  MetricGroupBaseSchema.extend({
+    status: z.literal("insufficient_evidence"),
+    metrics: z.array(MetricSchema).length(0)
+  }).strict()
+]);
 
 const SummaryBaseSchema = z
   .object({
-    schema_version: z.literal(1),
+    schema_version: z.literal(2),
     ticker: z.string().min(1).max(40),
     ticker_slug: TickerSlugSchema,
     company: z.string().min(1).max(120),
@@ -166,20 +165,20 @@ const SummaryBaseSchema = z
     version_id: VersionIdSchema,
     source_tree_hash: Sha256Schema,
     content_hash: Sha256Schema,
-    supersedes: VersionIdSchema.optional(),
-    correction_reason: z.string().min(1).max(240).optional(),
+    supersedes: VersionIdSchema.nullable(),
+    correction_reason: z.string().min(1).max(240).nullable(),
     rating: z.enum(["Buy", "Overweight", "Hold", "Underweight", "Sell"]),
     conclusion: z.string().min(1).max(360),
     advice_matrix: z.array(AdviceRowSchema).length(4),
-    metric_groups: z.array(MetricGroupSchema).min(1).max(5),
+    metric_groups: z.array(MetricGroupSchema).length(5),
     disclaimer: z
       .object({
         historical_boundary: z.string().min(1).max(240),
         ai_assisted: z.string().min(1).max(240),
-        not_investment_advice: z.string().min(1).max(240)
+        not_investment_advice: z.string().min(1).max(240),
+        public_access: z.string().min(1).max(240)
       })
       .strict(),
-    attributions: z.array(AttributionSchema).min(1).max(30),
     report_route: ReportRouteSchema,
     download_route: DownloadRouteSchema
   })
@@ -193,11 +192,15 @@ export const SummarySchema = SummaryBaseSchema.superRefine((summary, context) =>
       message: "the advice matrix must contain every position exactly once"
     });
   }
-  if (new Set(summary.metric_groups.map((group) => group.group)).size !== summary.metric_groups.length) {
+  if (
+    summary.metric_groups.some(
+      (group, index) => group.group !== MetricGroupNameSchema.options[index]
+    )
+  ) {
     context.addIssue({
       code: "custom",
       path: ["metric_groups"],
-      message: "metric groups must be unique"
+      message: "metric groups must appear once in stable order"
     });
   }
   const metricCount = summary.metric_groups.reduce((total, group) => total + group.metrics.length, 0);
@@ -206,13 +209,6 @@ export const SummarySchema = SummaryBaseSchema.superRefine((summary, context) =>
       code: "custom",
       path: ["metric_groups"],
       message: "public metric count exceeds 50"
-    });
-  }
-  if (new Set(summary.attributions.map((item) => item.policy_entry_id)).size !== summary.attributions.length) {
-    context.addIssue({
-      code: "custom",
-      path: ["attributions"],
-      message: "attribution policy entries must be unique"
     });
   }
   if (summary.report_route !== expectedReportRoute(summary.ticker_slug, summary.analysis_date, summary.version_id)) {
@@ -228,7 +224,7 @@ export const SummarySchema = SummaryBaseSchema.superRefine((summary, context) =>
       message: "download route does not match identity"
     });
   }
-  if (Boolean(summary.supersedes) !== Boolean(summary.correction_reason)) {
+  if ((summary.supersedes === null) !== (summary.correction_reason === null)) {
     context.addIssue({
       code: "custom",
       path: ["supersedes"],
@@ -239,7 +235,7 @@ export const SummarySchema = SummaryBaseSchema.superRefine((summary, context) =>
 
 const ManifestBaseSchema = z
   .object({
-    schema_version: z.literal(1),
+    schema_version: z.literal(2),
     ticker: z.string().min(1).max(40),
     ticker_slug: TickerSlugSchema,
     company: z.string().min(1).max(120),
@@ -253,33 +249,14 @@ const ManifestBaseSchema = z
     summary_sha256: Sha256Schema,
     complete_report_sha256: Sha256Schema,
     publisher_version: z.string().min(1).max(80),
-    provenance_attestation_hash: Sha256Schema,
-    source_classes: z.array(PublicSourceClassSchema).min(1).max(30),
-    supersedes: VersionIdSchema.optional(),
-    correction_reason: z.string().min(1).max(240).optional(),
+    supersedes: VersionIdSchema.nullable(),
+    correction_reason: z.string().min(1).max(240).nullable(),
     report_route: ReportRouteSchema,
     download_route: DownloadRouteSchema
   })
   .strict();
 
 export const ManifestSchema = ManifestBaseSchema.superRefine((manifest, context) => {
-  if (new Set(manifest.source_classes.map((item) => item.source_class)).size !== manifest.source_classes.length) {
-    context.addIssue({
-      code: "custom",
-      path: ["source_classes"],
-      message: "source classes must be unique"
-    });
-  }
-  if (
-    new Set(manifest.source_classes.map((item) => item.policy_entry_id)).size !==
-    manifest.source_classes.length
-  ) {
-    context.addIssue({
-      code: "custom",
-      path: ["source_classes"],
-      message: "source policy entry IDs must be unique"
-    });
-  }
   if (manifest.report_route !== expectedReportRoute(manifest.ticker_slug, manifest.analysis_date, manifest.version_id)) {
     context.addIssue({ code: "custom", path: ["report_route"], message: "report route does not match identity" });
   }
@@ -293,7 +270,7 @@ export const ManifestSchema = ManifestBaseSchema.superRefine((manifest, context)
       message: "download route does not match identity"
     });
   }
-  if (Boolean(manifest.supersedes) !== Boolean(manifest.correction_reason)) {
+  if ((manifest.supersedes === null) !== (manifest.correction_reason === null)) {
     context.addIssue({
       code: "custom",
       path: ["supersedes"],
@@ -302,52 +279,8 @@ export const ManifestSchema = ManifestBaseSchema.superRefine((manifest, context)
   }
 });
 
-const SourcePolicyEntrySchema = z
-  .object({
-    id: PolicyEntryIdSchema,
-    source_class: SourceClassNameSchema,
-    status: z.enum(["allowed", "restricted", "unknown"]),
-    allowed_content_classes: z.array(ContentClassSchema).max(30),
-    prohibited_content_classes: z.array(ContentClassSchema).max(30),
-    required_attribution: z.string().min(1).max(300),
-    terms_url: HttpUrlSchema,
-    reviewed_on: z.iso.date()
-  })
-  .strict()
-  .superRefine((entry, context) => {
-    const allowed = new Set(entry.allowed_content_classes);
-    if (allowed.size !== entry.allowed_content_classes.length) {
-      context.addIssue({ code: "custom", path: ["allowed_content_classes"], message: "values must be unique" });
-    }
-    if (new Set(entry.prohibited_content_classes).size !== entry.prohibited_content_classes.length) {
-      context.addIssue({ code: "custom", path: ["prohibited_content_classes"], message: "values must be unique" });
-    }
-    if (entry.prohibited_content_classes.some((value) => allowed.has(value))) {
-      context.addIssue({
-        code: "custom",
-        path: ["prohibited_content_classes"],
-        message: "a content class cannot be both allowed and prohibited"
-      });
-    }
-  });
-
-export const SourcePolicySchema = z
-  .object({
-    schema_version: z.literal(1),
-    entries: z.array(SourcePolicyEntrySchema).max(200)
-  })
-  .strict()
-  .superRefine((policy, context) => {
-    if (new Set(policy.entries.map((entry) => entry.id)).size !== policy.entries.length) {
-      context.addIssue({ code: "custom", path: ["entries"], message: "policy entry IDs must be unique" });
-    }
-    if (new Set(policy.entries.map((entry) => entry.source_class)).size !== policy.entries.length) {
-      context.addIssue({ code: "custom", path: ["entries"], message: "source classes must be unique" });
-    }
-  });
-
 const EventBaseShape = {
-  schema_version: z.literal(1),
+  schema_version: z.literal(2),
   event_id: z.string().regex(/^[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*$/).max(120),
   timestamp: z.iso.datetime({ offset: true }),
   version_id: VersionIdSchema,
@@ -396,7 +329,7 @@ const WithdrawnEventBaseSchema = z
     report_route: ReportRouteSchema,
     download_route: DownloadRouteSchema,
     public_reason: z.string().min(1).max(240),
-    source_classes: z.array(PublicSourceClassSchema).min(1).max(30)
+    publication_commit: CommitHashSchema
   })
   .strict()
   .superRefine((event, context) => {
@@ -423,5 +356,4 @@ export const PublicationEventSchema = z.union([
 
 export type Summary = z.infer<typeof SummarySchema>;
 export type Manifest = z.infer<typeof ManifestSchema>;
-export type SourcePolicy = z.infer<typeof SourcePolicySchema>;
 export type PublicationEvent = z.infer<typeof PublicationEventSchema>;

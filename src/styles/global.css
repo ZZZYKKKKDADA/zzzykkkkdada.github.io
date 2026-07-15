@@ -530,6 +530,12 @@ time,
   font-size: 0.88rem;
 }
 
+.metric-insufficient {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .report-disclosure {
   color: var(--muted);
 }

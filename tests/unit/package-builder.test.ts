@@ -18,6 +18,32 @@ import {
 } from "../helpers/fixtures";
 
 describe("immutable package builder", () => {
+  it("builds schema v2 without provider metadata", async () => {
+    const root = await copyFixture("valid");
+    const result = await buildPackage({
+      ...ordinaryInput,
+      siteRoot: root,
+      sourceTreeHash: HASH_C
+    });
+    if (result.kind !== "created") throw new Error("expected created package");
+    const manifest = JSON.parse(
+      await readFile(join(result.packageRoot, "manifest.json"), "utf8")
+    );
+    expect(manifest.schema_version).toBe(2);
+    expect(manifest).not.toHaveProperty("source_classes");
+    expect(manifest).not.toHaveProperty("provenance_attestation_hash");
+  });
+
+  it("rejects removed provider inputs", async () => {
+    await expect(
+      buildPackage({
+        ...ordinaryInput,
+        publicProvenance: [],
+        provenanceAttestationHash: HASH_C
+      } as never)
+    ).rejects.toThrow("INVALID_PACKAGE_INPUT");
+  });
+
   it("returns the existing lineage before writing when source_tree_hash matches", async () => {
     const beforeDigest = await treeDigest(siteRoot);
     const result = await buildPackage({ ...ordinaryInput, sourceTreeHash: existingHash });

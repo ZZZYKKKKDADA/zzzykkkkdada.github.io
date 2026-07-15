@@ -65,16 +65,12 @@ const summary = report.summary;
         <MetricGroups groups={summary.metric_groups} />
 
         <section class="report-disclosure" aria-labelledby="disclosure-title">
-          <h2 id="disclosure-title">使用边界与来源</h2>
+          <h2 id="disclosure-title">使用边界</h2>
           <strong>仅供研究交流，不构成个性化投资建议</strong>
           <p>{summary.disclaimer.historical_boundary}</p>
           <p>{summary.disclaimer.ai_assisted}</p>
           <p>{summary.disclaimer.not_investment_advice}</p>
-          <ul>
-            {summary.attributions.map((item) => (
-              <li><a href={item.url} rel="noopener noreferrer">{item.text}</a></li>
-            ))}
-          </ul>
+          <p>{summary.disclaimer.public_access}</p>
           <a href={report.downloadRoute!} download>下载完整 Markdown</a>
         </section>
 

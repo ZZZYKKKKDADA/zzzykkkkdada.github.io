@@ -1,30 +1,38 @@
 import { lstat, readFile, readdir } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
-import { parse as parseYaml } from "yaml";
 import {
   ManifestSchema,
   PublicationEventSchema,
-  SourcePolicySchema,
   SummarySchema,
   type Manifest,
   type PublicationEvent,
-  type SourcePolicy,
   type Summary
 } from "./contracts";
 import { sha256Bytes } from "./crypto";
+import {
+  scanPublicBytes,
+  type PublicContentFinding
+} from "./public-content-scan";
 
 export interface LoadedPackage {
   root: string;
   summary: Summary;
   manifest: Manifest;
   markdown: Uint8Array;
+  publicContentFindings: readonly PublicContentFinding[];
+}
+
+export interface EventContentFinding {
+  finding: PublicContentFinding;
+  versionId?: string;
+  route?: string;
 }
 
 export interface SiteRepository {
   root: string;
   packages: ReadonlyMap<string, LoadedPackage>;
   events: readonly PublicationEvent[];
-  policy: SourcePolicy;
+  eventContentFindings: readonly EventContentFinding[];
 }
 
 function failure(code: string): Error {
@@ -49,30 +57,17 @@ const IGNORED_GENERATED_ROOTS = new Set([
 const REPORT_FILE_PATTERN =
   /^reports\/[a-z0-9-]+\/\d{4}-\d{2}-\d{2}\/\d{8}-\d{6}-[a-f0-9]{8,64}\/(manifest\.json|summary\.json|complete_report\.md)$/;
 const CONTROL_PATTERN = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/;
-const PRIVATE_PATTERNS = [
-  /\/Volumes\//i,
-  /\/Users\//i,
-  /file:\/\//i,
-  /(?:^|[^A-Za-z0-9_])\.env(?:[^A-Za-z0-9_]|$)/i,
-  /private[_ -]?source[_ -]?map/i,
-  /source map/i,
-  /validation (?:excerpt|output|artifact)/i,
-  /reasoning trace/i,
-  /system prompt/i,
-  /model messages?/i,
-  /(?:api[_ -]?key|access[_ -]?token|secret|password)\s*[:=]\s*[^\s,}\]]+/i
-];
-
-function assertPublicBytes(bytes: Uint8Array): void {
+function inspectPublicBytes(file: string, bytes: Uint8Array): PublicContentFinding[] {
   let text: string;
   try {
     text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
   } catch {
     throw failure("UNSAFE_PUBLIC_CONTENT");
   }
-  if (CONTROL_PATTERN.test(text) || PRIVATE_PATTERNS.some((pattern) => pattern.test(text))) {
+  if (CONTROL_PATTERN.test(text)) {
     throw failure("UNSAFE_PUBLIC_CONTENT");
   }
+  return scanPublicBytes(file, bytes);
 }
 
 async function inventorySafeFiles(root: string, current = root): Promise<string[]> {
@@ -149,7 +144,11 @@ async function loadPackage(root: string, manifestPath: string): Promise<LoadedPa
     throw failure("INCOMPLETE_REPORT_PACKAGE");
   }
 
-  for (const bytes of [manifestBytes, summaryBytes, markdown]) assertPublicBytes(bytes);
+  const publicContentFindings = [
+    ...inspectPublicBytes(manifestPath, manifestBytes),
+    ...inspectPublicBytes(relative(root, summaryPath).split(sep).join("/"), summaryBytes),
+    ...inspectPublicBytes(relative(root, markdownPath).split(sep).join("/"), markdown)
+  ];
 
   const summaryHash = sha256Bytes(summaryBytes);
   const markdownHash = sha256Bytes(markdown);
@@ -161,16 +160,25 @@ async function loadPackage(root: string, manifestPath: string): Promise<LoadedPa
 
   const packagePath = relative(root, packageRoot).split(sep).join("/");
   assertPackageIdentity(summary, manifest, packagePath);
-  return { root: packageRoot, summary, manifest, markdown };
+  return { root: packageRoot, summary, manifest, markdown, publicContentFindings };
 }
 
-function parseEvents(bytes: Uint8Array): PublicationEvent[] {
+function parseEvents(bytes: Uint8Array): {
+  events: PublicationEvent[];
+  byLine: ReadonlyMap<number, PublicationEvent>;
+} {
   const content = Buffer.from(bytes).toString("utf8");
-  if (content.trim() === "") return [];
-  return content.split("\n").flatMap((line) => {
-    if (line.trim() === "") return [];
-    return [PublicationEventSchema.parse(parseJson(Buffer.from(line), "INVALID_EVENT_JSON"))];
-  });
+  const events: PublicationEvent[] = [];
+  const byLine = new Map<number, PublicationEvent>();
+  for (const [index, line] of content.split("\n").entries()) {
+    if (line.trim() === "") continue;
+    const event = PublicationEventSchema.parse(
+      parseJson(Buffer.from(line), "INVALID_EVENT_JSON")
+    );
+    events.push(event);
+    byLine.set(index + 1, event);
+  }
+  return { events, byLine };
 }
 
 export async function loadSiteRepository(root: string): Promise<SiteRepository> {
@@ -181,6 +189,9 @@ export async function loadSiteRepository(root: string): Promise<SiteRepository> 
   }
 
   const files = await inventorySafeFiles(repositoryRoot);
+  if (files.includes("config/publication-sources.yaml")) {
+    throw failure("OBSOLETE_POLICY_FILE");
+  }
   for (const path of files) {
     if (path.startsWith("reports/") && path !== "reports/.gitkeep" && !REPORT_FILE_PATTERN.test(path)) {
       throw failure("UNEXPECTED_REPORT_PATH");
@@ -192,27 +203,25 @@ export async function loadSiteRepository(root: string): Promise<SiteRepository> 
     )
   );
 
-  let policyBytes: Uint8Array;
   let eventBytes: Uint8Array;
   try {
-    [policyBytes, eventBytes] = await Promise.all([
-      readFile(join(repositoryRoot, "config/publication-sources.yaml")),
-      readFile(join(repositoryRoot, "publication-events.jsonl"))
-    ]);
+    eventBytes = await readFile(join(repositoryRoot, "publication-events.jsonl"));
   } catch {
     throw failure("MISSING_SITE_CONTRACT_FILE");
   }
-  assertPublicBytes(policyBytes);
-  assertPublicBytes(eventBytes);
-
-  let policyInput: unknown;
-  try {
-    policyInput = parseYaml(Buffer.from(policyBytes).toString("utf8"));
-  } catch {
-    throw failure("INVALID_SOURCE_POLICY_YAML");
-  }
-  const policy = SourcePolicySchema.parse(policyInput);
-  const events = parseEvents(eventBytes);
+  const eventScanFindings = inspectPublicBytes("publication-events.jsonl", eventBytes);
+  const parsedEvents = parseEvents(eventBytes);
+  const eventContentFindings = eventScanFindings.map((finding) => {
+    const event = parsedEvents.byLine.get(finding.line);
+    return {
+      finding,
+      versionId: event?.version_id,
+      route:
+        event && "report_route" in event && typeof event.report_route === "string"
+          ? event.report_route
+          : undefined
+    };
+  });
 
   const packages = new Map<string, LoadedPackage>();
   for (const manifestPath of manifestPaths.sort()) {
@@ -223,5 +232,10 @@ export async function loadSiteRepository(root: string): Promise<SiteRepository> 
     packages.set(loadedPackage.manifest.version_id, loadedPackage);
   }
 
-  return { root: repositoryRoot, packages, events, policy };
+  return {
+    root: repositoryRoot,
+    packages,
+    events: parsedEvents.events,
+    eventContentFindings
+  };
 }
