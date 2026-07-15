@@ -7,9 +7,13 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
 export interface TocItem {
-  depth: 1 | 2 | 3;
+  depth: 1 | 2 | 3 | 4 | 5 | 6;
   id: string;
   text: string;
+}
+
+export interface TocNode extends TocItem {
+  children: TocNode[];
 }
 
 export interface RenderedMarkdown {
@@ -92,8 +96,8 @@ function headingIds(toc: TocItem[]) {
       const id = slugger.slug(text || "section");
       node.data = node.data ?? {};
       node.data.hProperties = { ...(node.data.hProperties ?? {}), id };
-      if (node.depth >= 1 && node.depth <= 3) {
-        toc.push({ depth: node.depth as 1 | 2 | 3, id, text });
+      if (node.depth >= 1 && node.depth <= 6) {
+        toc.push({ depth: node.depth as TocItem["depth"], id, text });
       }
     });
   };

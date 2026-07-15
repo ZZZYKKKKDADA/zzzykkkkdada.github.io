@@ -572,15 +572,90 @@ time,
 }
 
 .complete-report > nav ol {
-  columns: 2;
+  list-style: none;
   margin: 0;
-  padding-left: 1.2rem;
+  padding: 0;
 }
 
-.complete-report > nav li {
-  break-inside: avoid;
-  margin-bottom: 0.35rem;
+.complete-report > nav .report-toc-tree {
+  margin-top: 0.8rem;
+}
+
+.complete-report > nav .report-toc-group {
+  margin: 0.1rem 0 0.2rem 0.72rem;
+  border-left: 1px solid var(--line);
+  padding-left: 0.72rem;
+}
+
+.report-toc-row {
+  display: grid;
+  grid-template-columns: 1.55rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.3rem;
+  min-height: 2rem;
+  padding: 0.18rem 0;
+}
+
+.report-toc-row > a {
+  min-width: 0;
+  padding: 0.18rem 0;
   font-size: 0.85rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.report-toc-item[data-depth="1"] > .report-toc-row > a {
+  color: var(--ink);
+  font-size: 0.96rem;
+  font-weight: 800;
+}
+
+.report-toc-item[data-depth="2"] > .report-toc-row > a {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.report-toc-item[data-depth="3"] > .report-toc-row > a {
+  font-weight: 650;
+}
+
+.report-toc-toggle,
+.report-toc-spacer {
+  width: 1.55rem;
+  height: 1.55rem;
+}
+
+.report-toc-toggle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 3px;
+  padding: 0;
+  background: transparent;
+  color: var(--jade);
+}
+
+.report-toc-toggle:hover {
+  background: var(--surface);
+}
+
+.report-toc-toggle:focus-visible {
+  outline: 2px solid var(--data);
+  outline-offset: 1px;
+}
+
+.report-toc-toggle > span {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 140ms ease;
+}
+
+.report-toc-toggle[aria-expanded="true"] > span {
+  transform: rotate(45deg) translate(-0.08rem, -0.08rem);
 }
 
 .markdown-body {
@@ -591,7 +666,10 @@ time,
 
 .markdown-body h1,
 .markdown-body h2,
-.markdown-body h3 {
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
   scroll-margin-top: 1.5rem;
 }
 
@@ -700,8 +778,13 @@ time,
     gap: 0.4rem;
   }
 
-  .complete-report > nav ol {
-    columns: 1;
+  .complete-report > nav {
+    padding-left: 0.75rem;
+  }
+
+  .complete-report > nav .report-toc-group {
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
   }
 }
 

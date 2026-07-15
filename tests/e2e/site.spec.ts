@@ -47,6 +47,47 @@ test("complete report expands, anchors, and restores focus", async ({ page }) =>
   await expect(page.locator("#市场分析")).toBeFocused();
 });
 
+test("report directory shows three levels and reveals one deeper level at a time", async ({
+  page
+}) => {
+  await page.goto(validReportRoute);
+  const directory = page.getByRole("navigation", { name: "完整报告目录" });
+  const levelFour = directory.getByRole("link", { name: "短期结构", includeHidden: true });
+  const levelFive = directory.getByRole("link", { name: "风险条件", includeHidden: true });
+  const levelSix = directory.getByRole("link", { name: "触发阈值", includeHidden: true });
+
+  await expect(directory.getByRole("link", { name: "三花智控合成测试报告" })).toBeVisible();
+  await expect(directory.getByRole("link", { name: "市场分析" })).toBeVisible();
+  await expect(directory.getByRole("link", { name: "趋势判断" })).toBeVisible();
+  await expect(levelFour).toHaveCount(1);
+  await expect(levelFour).toBeHidden();
+  await expect(levelFive).toBeHidden();
+  await expect(levelSix).toBeHidden();
+
+  const levelThreeToggle = directory.getByRole("button", {
+    name: "展开“趋势判断”的下一级"
+  });
+  await expect(levelThreeToggle).toHaveAttribute("aria-expanded", "false");
+  await levelThreeToggle.click();
+  await expect(levelFour).toBeVisible();
+  await expect(levelFive).toBeHidden();
+
+  const levelFourToggle = directory.getByRole("button", {
+    name: "展开“短期结构”的下一级"
+  });
+  await levelFourToggle.click();
+  await expect(levelFive).toBeVisible();
+  await expect(levelSix).toBeHidden();
+
+  await directory.getByRole("button", { name: "展开“风险条件”的下一级" }).click();
+  await expect(levelSix).toBeVisible();
+  await levelSix.click();
+  await expect(page.locator("#触发阈值")).toBeFocused();
+
+  await directory.getByRole("button", { name: "收起“趋势判断”的下一级" }).click();
+  await expect(levelFour).toBeHidden();
+});
+
 test("download is byte-identical Markdown with a safe media type", async ({ request }) => {
   const response = await request.get(validDownloadRoute);
   expect(response.status()).toBe(200);

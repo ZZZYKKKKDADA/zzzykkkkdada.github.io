@@ -1,0 +1,45 @@
+---
+import type { TocNode } from "../lib/markdown";
+
+interface Props {
+  node: TocNode;
+  path: string;
+  reportId: string;
+}
+
+const { node, path, reportId } = Astro.props;
+const hasChildren = node.children.length > 0;
+const childrenExpanded = hasChildren && node.children[0].depth <= 3;
+const groupId = `report-toc-${reportId}-${path}`;
+const toggleAction = childrenExpanded ? "收起" : "展开";
+---
+
+<li class="report-toc-item" data-depth={node.depth}>
+  <div class="report-toc-row">
+    {hasChildren ? (
+      <button
+        class="report-toc-toggle"
+        type="button"
+        aria-controls={groupId}
+        aria-expanded={childrenExpanded}
+        aria-label={`${toggleAction}“${node.text}”的下一级`}
+        title={`${toggleAction}下一级`}
+        data-toc-label={node.text}
+        data-toc-toggle
+      >
+        <span aria-hidden="true"></span>
+      </button>
+    ) : (
+      <span class="report-toc-spacer" aria-hidden="true"></span>
+    )}
+    <a href={`#${node.id}`} data-report-anchor>{node.text}</a>
+  </div>
+
+  {hasChildren && (
+    <ol id={groupId} class="report-toc-group" hidden={!childrenExpanded} data-toc-group>
+      {node.children.map((child, index) => (
+        <Astro.self node={child} path={`${path}-${index}`} reportId={reportId} />
+      ))}
+    </ol>
+  )}
+</li>

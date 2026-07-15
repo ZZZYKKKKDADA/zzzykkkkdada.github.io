@@ -1,5 +1,6 @@
 ---
-import type { RenderedMarkdown } from "../lib/markdown";
+import type { RenderedMarkdown, TocNode } from "../lib/markdown";
+import ReportTocItem from "./ReportTocItem.astro";
 
 interface Props {
   versionId: string;
@@ -10,6 +11,20 @@ const { versionId, markdown } = Astro.props;
 const safeId = versionId.replace(/[^a-zA-Z0-9-]/g, "-");
 const panelId = `complete-report-${safeId}`;
 const buttonId = `complete-report-toggle-${safeId}`;
+const tocTree: TocNode[] = [];
+const tocStack: TocNode[] = [];
+
+for (const item of markdown.toc) {
+  while (tocStack.length > 0 && tocStack[tocStack.length - 1].depth >= item.depth) {
+    tocStack.pop();
+  }
+
+  const node: TocNode = { ...item, children: [] };
+  const parent = tocStack[tocStack.length - 1];
+  if (parent) parent.children.push(node);
+  else tocTree.push(node);
+  tocStack.push(node);
+}
 ---
 
 <section
@@ -20,18 +35,22 @@ const buttonId = `complete-report-toggle-${safeId}`;
   <header>
     <p>原始长文</p>
     <h2 id={`complete-report-title-${safeId}`}>完整报告</h2>
-    <button id={buttonId} type="button" aria-controls={panelId} aria-expanded="false">
+    <button
+      id={buttonId}
+      type="button"
+      aria-controls={panelId}
+      aria-expanded="false"
+      data-report-toggle
+    >
       展开完整报告
     </button>
   </header>
 
   <nav aria-label="完整报告目录">
     <h3>报告目录</h3>
-    <ol>
-      {markdown.toc.map((item) => (
-        <li data-depth={item.depth}>
-          <a href={`#${item.id}`} data-report-anchor>{item.text}</a>
-        </li>
+    <ol class="report-toc-tree">
+      {tocTree.map((node, index) => (
+        <ReportTocItem node={node} path={String(index)} reportId={safeId} />
       ))}
     </ol>
   </nav>
@@ -41,7 +60,7 @@ const buttonId = `complete-report-toggle-${safeId}`;
 
 <script>
   for (const container of document.querySelectorAll<HTMLElement>("[data-complete-report]")) {
-    const button = container.querySelector<HTMLButtonElement>("button[aria-controls]");
+    const button = container.querySelector<HTMLButtonElement>("[data-report-toggle]");
     const panelId = button?.getAttribute("aria-controls");
     const panel = panelId ? document.getElementById(panelId) : null;
     if (!(panel instanceof HTMLElement) || !(button instanceof HTMLButtonElement)) continue;
@@ -57,6 +76,21 @@ const buttonId = `complete-report-toggle-${safeId}`;
     toggleButton.addEventListener("click", () => {
       setExpanded(toggleButton.getAttribute("aria-expanded") !== "true");
     });
+
+    for (const tocToggle of container.querySelectorAll<HTMLButtonElement>("[data-toc-toggle]")) {
+      const groupId = tocToggle.getAttribute("aria-controls");
+      const group = groupId ? document.getElementById(groupId) : null;
+      const label = tocToggle.dataset.tocLabel;
+      if (!(group instanceof HTMLOListElement) || !label) continue;
+
+      tocToggle.addEventListener("click", () => {
+        const expanded = tocToggle.getAttribute("aria-expanded") !== "true";
+        group.hidden = !expanded;
+        tocToggle.setAttribute("aria-expanded", String(expanded));
+        tocToggle.setAttribute("aria-label", `${expanded ? "收起" : "展开"}“${label}”的下一级`);
+        tocToggle.title = `${expanded ? "收起" : "展开"}下一级`;
+      });
+    }
 
     for (const anchor of container.querySelectorAll<HTMLAnchorElement>(
       `[data-report-anchor][href^="#"]`
