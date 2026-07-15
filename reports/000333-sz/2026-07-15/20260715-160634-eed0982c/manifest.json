@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "000333.SZ",
+  "ticker_slug": "000333-sz",
+  "company": "美的集团",
+  "market": "A股",
+  "analysis_date": "2026-07-15",
+  "publication_date": "2026-07-15",
+  "source_display_timestamp": "20260715_160634",
+  "version_id": "20260715-160634-eed0982c",
+  "source_tree_hash": "5d2e60c1c68432d33f908aa68691d516f67f0ec4749942964cda22d5e0be3401",
+  "content_hash": "eed0982cefe02493cda076dcbd637c461eebdfc7be35b9d4df0cbb83134bfff4",
+  "summary_sha256": "dcf3831407180ef2a9587be99112b55b2eccefc8dce7c94e864a2dc6893c4644",
+  "complete_report_sha256": "d9a1421c498f506bac5f95d5c569bcd9be93bf3ff7ba1f469ece3a2130f6c14f",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/000333-sz/2026-07-15/20260715-160634-eed0982c/",
+  "download_route": "/reports/000333-sz/2026-07-15/20260715-160634-eed0982c/complete_report.md"
+}
