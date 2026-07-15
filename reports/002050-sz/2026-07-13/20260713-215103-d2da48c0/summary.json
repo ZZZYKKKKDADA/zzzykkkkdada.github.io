@@ -1,0 +1,347 @@
+{
+  "schema_version": 2,
+  "ticker": "002050.SZ",
+  "ticker_slug": "002050-sz",
+  "company": "三花智控",
+  "market": "A股",
+  "analysis_date": "2026-07-13",
+  "publication_date": "2026-07-15",
+  "version_id": "20260713-215103-d2da48c0",
+  "source_tree_hash": "53ddaa1b5fa91689e0744f9f26b12f4ef03c3f29d3bc8f7bd320a446b647c5f2",
+  "content_hash": "d2da48c06064ed64c10ff5f1def01156a774cd739c337bf100880d7dd9618d96",
+  "supersedes": null,
+  "correction_reason": null,
+  "rating": "Underweight",
+  "conclusion": "截至2026年7月13日，报告建议将三花智控维持在低于基准的权重：基本面增长和资产负债表不支持全面清仓，但约43倍滚动市盈率、负自由现金流、存货上升及弱势技术结构不支持主动加仓。已有持仓宜分批降至低权重，空仓暂不建立战略仓位，待价格、成交量与中报或新业务硬数据共同改善后再评估。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "仅在止跌确认后小仓试错",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "40.41-41.53元区域止跌、收盘重回42元上方且MACD柱连续改善"
+          ],
+          "risk": "ATR约2.42元，弱势反抽可能迅速回落"
+        },
+        {
+          "style": "short_conservative",
+          "action": "暂不建仓，等待短线趋势修复",
+          "action_class": "avoid",
+          "conditions": [
+            "放量收复43.65-44.18元并站稳44.65元后重新评估"
+          ],
+          "risk": "RSI尚未超卖，价格仍可能继续下探"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "满足验证条件后建立观察性轻仓",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "站稳44.65元且中报或液冷订单等硬数据改善"
+          ],
+          "risk": "新业务仍缺少订单、收入和利润率量化验证"
+        },
+        {
+          "style": "long_conservative",
+          "action": "暂不建立战略性仓位",
+          "action_class": "avoid",
+          "conditions": [
+            "站稳46.95-47.15元且自由现金流和产能利用率改善后再评估"
+          ],
+          "risk": "高估值对盈利增速降档较敏感"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "维持轻仓并执行收盘破位纪律",
+          "action_class": "hold",
+          "conditions": [
+            "收盘有效跌破40.41元且次日未收回时进一步减仓"
+          ],
+          "risk": "不能把缩量下跌直接视为抛压结束"
+        },
+        {
+          "style": "short_conservative",
+          "action": "保持低权重，不在41元附近加仓",
+          "action_class": "hold",
+          "conditions": [
+            "反弹至43.65-44.18元但无量受阻时继续降低风险"
+          ],
+          "risk": "价格仍低于短中长期关键均线"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "保留少量成长敞口并等待硬数据",
+          "action_class": "hold",
+          "conditions": [
+            "液冷订单、机器人定点或中报盈利出现量化验证"
+          ],
+          "risk": "扩产投入尚未证明资本回报"
+        },
+        {
+          "style": "long_conservative",
+          "action": "维持观察仓位并暂停新增",
+          "action_class": "hold",
+          "conditions": [
+            "价格站稳46.95-47.15元且自由现金流恢复后再提高配置"
+          ],
+          "risk": "约43倍滚动市盈率已包含较高增长预期"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "反弹受阻时减至轻仓",
+          "action_class": "reduce",
+          "conditions": [
+            "43.65-44.18元反弹无量或无法站稳"
+          ],
+          "risk": "上方成交成本区可能形成持续抛压"
+        },
+        {
+          "style": "short_conservative",
+          "action": "立即降至低于基准权重",
+          "action_class": "reduce",
+          "conditions": [
+            "收盘跌破40.41元时继续收缩仓位"
+          ],
+          "risk": "高波动会放大中等仓位的账户回撤"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "减至轻仓并保留有限上行敞口",
+          "action_class": "reduce",
+          "conditions": [
+            "44.65元和MACD未同步改善前不恢复仓位"
+          ],
+          "risk": "成熟业务支撑不等于当前估值具备安全边际"
+        },
+        {
+          "style": "long_conservative",
+          "action": "继续分批降仓并暂停新增",
+          "action_class": "reduce",
+          "conditions": [
+            "中报、订单、产能利用率和自由现金流未验证前维持低权重"
+          ],
+          "risk": "增长兑现不足可能同时压缩盈利预期和估值"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "快速降低集中度并停止摊低成本",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "弱势趋势和高ATR使重仓暴露不符合报告的风险收益判断"
+        },
+        {
+          "style": "short_conservative",
+          "action": "分批降至明显低于基准权重",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "收盘破位可能触发进一步估值回撤"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "降至轻仓，仅保留长期观察敞口",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "液冷和机器人价值尚未形成可量化盈利贡献"
+        },
+        {
+          "style": "long_conservative",
+          "action": "持续减仓至低权重防守配置",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "资本开支回报、存货和自由现金流仍需后续季度验证"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收盘价与10日EMA",
+          "source_value": "41.60 / 43.65",
+          "unit": "元",
+          "as_of_date": "2026-07-13",
+          "interpretation": "收盘价低于10日EMA，短线仍处于弱势。",
+          "decision_impact": "43.65元是短线修复的第一门槛。"
+        },
+        {
+          "name": "收盘价与50日SMA",
+          "source_value": "41.60 / 47.15",
+          "unit": "元",
+          "as_of_date": "2026-07-13",
+          "interpretation": "价格明显低于50日SMA，中期趋势尚未修复。",
+          "decision_impact": "站稳47.15元前不宜恢复正常中期配置。"
+        },
+        {
+          "name": "收盘价与200日SMA",
+          "source_value": "41.60 / 46.95",
+          "unit": "元",
+          "as_of_date": "2026-07-13",
+          "interpretation": "价格位于长期均线下方，长期趋势需要重新确认。",
+          "decision_impact": "46.95-47.15元构成中长期确认区。"
+        }
+      ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "MACD",
+          "source_value": "-0.97",
+          "unit": "指数点",
+          "as_of_date": "2026-07-13",
+          "interpretation": "MACD低于信号线-0.86，空头动能占优。",
+          "decision_impact": "MACD改善前不支持主动加仓。"
+        },
+        {
+          "name": "MACD柱",
+          "source_value": "-0.10",
+          "unit": "指数点",
+          "as_of_date": "2026-07-13",
+          "interpretation": "柱值重新转负，7月初的修复动能未延续。",
+          "decision_impact": "柱值连续改善可作为止跌确认条件之一。"
+        },
+        {
+          "name": "RSI",
+          "source_value": "40.92",
+          "unit": "点",
+          "as_of_date": "2026-07-13",
+          "interpretation": "RSI低于50但高于30，偏弱且尚未超卖。",
+          "decision_impact": "当前RSI不能单独构成抄底依据。"
+        }
+      ]
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "滚动市盈率",
+          "source_value": "42.83",
+          "unit": "倍",
+          "as_of_date": "2026-07-13",
+          "interpretation": "超过40倍的滚动市盈率反映较高增长预期。",
+          "decision_impact": "盈利增速降档可能引发估值压缩。"
+        },
+        {
+          "name": "市净率",
+          "source_value": "5.37",
+          "unit": "倍",
+          "as_of_date": "2026-07-13",
+          "interpretation": "市场对技术能力和成长性给予较高溢价。",
+          "decision_impact": "当前估值缺少明显安全边际。"
+        },
+        {
+          "name": "滚动股息率",
+          "source_value": "0.2878",
+          "unit": "%",
+          "as_of_date": "2026-07-13",
+          "interpretation": "股息率约0.29%，回报主要依赖盈利增长和估值维持。",
+          "decision_impact": "低股息无法缓冲高估值回撤风险。"
+        }
+      ]
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "2026Q1营业收入",
+          "source_value": "77.74 / +20.7",
+          "unit": "亿元 / 同比%",
+          "as_of_date": "2026-03-31",
+          "interpretation": "收入保持较快增长，成熟业务仍有经营支撑。",
+          "decision_impact": "收入增长是不全面清仓的依据之一。"
+        },
+        {
+          "name": "2026Q1归母净利润",
+          "source_value": "9.28 / +43.2",
+          "unit": "亿元 / 同比%",
+          "as_of_date": "2026-03-31",
+          "interpretation": "利润增速明显高于收入增速。",
+          "decision_impact": "后续需验证高利润增速能否持续。"
+        },
+        {
+          "name": "2026Q1毛利率",
+          "source_value": "27.80 / +0.97",
+          "unit": "% / 同比百分点",
+          "as_of_date": "2026-03-31",
+          "interpretation": "毛利率同比改善，盈利质量出现积极信号。",
+          "decision_impact": "毛利率若明显降档将削弱估值支撑。"
+        },
+        {
+          "name": "2026Q1经营现金流",
+          "source_value": "11.06 / +136.5",
+          "unit": "亿元 / 同比%",
+          "as_of_date": "2026-03-31",
+          "interpretation": "经营现金流显著改善并支持主营盈利质量。",
+          "decision_impact": "经营现金流改善支持保留有限观察敞口。"
+        },
+        {
+          "name": "资产负债率",
+          "source_value": "33.28",
+          "unit": "%",
+          "as_of_date": "2026-03-31",
+          "interpretation": "杠杆总体稳健，资产负债表具备缓冲。",
+          "decision_impact": "财务结构不支持在当前价位全面清仓。"
+        }
+      ]
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "2026Q1自由现金流",
+          "source_value": "-2.94",
+          "unit": "亿元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "投资现金流约-16.24亿元，使季度自由现金流转负。",
+          "decision_impact": "扩产形成回报前应限制仓位。"
+        },
+        {
+          "name": "ATR",
+          "source_value": "2.42",
+          "unit": "元",
+          "as_of_date": "2026-07-13",
+          "interpretation": "平均真实波动约占41.60元收盘价的5.8%。",
+          "decision_impact": "高波动要求降低仓位并避免机械盘中止损。"
+        }
+      ]
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至2026年7月13日的历史研究快照。",
+    "ai_assisted": "内容由AI依据冻结报告辅助整理。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex不是访问控制。"
+  },
+  "report_route": "/stocks/002050-sz/2026-07-13/20260713-215103-d2da48c0/",
+  "download_route": "/reports/002050-sz/2026-07-13/20260713-215103-d2da48c0/complete_report.md"
+}

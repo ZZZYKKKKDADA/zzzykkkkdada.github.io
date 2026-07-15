@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "002050.SZ",
+  "ticker_slug": "002050-sz",
+  "company": "三花智控",
+  "market": "A股",
+  "analysis_date": "2026-07-13",
+  "publication_date": "2026-07-15",
+  "source_display_timestamp": "20260713_215103",
+  "version_id": "20260713-215103-d2da48c0",
+  "source_tree_hash": "53ddaa1b5fa91689e0744f9f26b12f4ef03c3f29d3bc8f7bd320a446b647c5f2",
+  "content_hash": "d2da48c06064ed64c10ff5f1def01156a774cd739c337bf100880d7dd9618d96",
+  "summary_sha256": "cd18fb14a1b97bc9203ef18a922a31ed75ef40bbf56d1340b66439924941c49a",
+  "complete_report_sha256": "b41804f43773f0da4f0050d51143edca2d022e5ca16a140d971ddd1eabdc81b3",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/002050-sz/2026-07-13/20260713-215103-d2da48c0/",
+  "download_route": "/reports/002050-sz/2026-07-13/20260713-215103-d2da48c0/complete_report.md"
+}
