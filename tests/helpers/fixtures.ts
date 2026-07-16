@@ -173,13 +173,47 @@ export const siteRoot = fixture("valid");
 export const existingHash = validManifest.source_tree_hash;
 export const existingRoute = validManifest.report_route;
 const { version_id, content_hash, publication_date, ...summaryDraft } = validSummary;
+
+function productionSummaryDraft(): typeof summaryDraft {
+  const draft = structuredClone(summaryDraft);
+  const actionClasses = [
+    ["conditional_enter", "avoid", "conditional_enter", "avoid"],
+    ["conditional_add", "hold", "conditional_add", "hold"],
+    ["hold", "reduce", "conditional_add", "reduce"],
+    ["reduce", "reduce", "hold", "reduce"]
+  ];
+  draft.advice_matrix.forEach((row: any, rowIndex: number) => {
+    row.cells.forEach((cell: any, cellIndex: number) => {
+      cell.action = `合成操作建议-${row.position}-${cell.style}`;
+      cell.action_class = actionClasses[rowIndex][cellIndex];
+      cell.conditions = [`合成触发条件-${row.position}-${cell.style}`];
+      cell.risk = `合成风险-${row.position}-${cell.style}`;
+    });
+  });
+  const metricTemplate = structuredClone(draft.metric_groups[0].metrics[0]);
+  draft.metric_groups.forEach((group: any, index: number) => {
+    group.status = "supported";
+    group.metrics = [
+      {
+        ...metricTemplate,
+        name: `合成${group.label}指标`,
+        source_value: `fixture-${index + 1}.00`,
+        unit: "fixture-unit",
+        interpretation: `仅验证${group.label}结构。`,
+        decision_impact: `验证${group.label}决策映射。`
+      }
+    ];
+  });
+  return draft;
+}
+
 export const ordinaryInput = {
   mode: "publication" as const,
   siteRoot,
   sourceMarkdownPath: join(validPackage, "complete_report.md"),
   sourceTreeHash: existingHash,
   sourceDisplayTimestamp: "20260713_215103",
-  summaryDraft
+  summaryDraft: productionSummaryDraft()
 };
 export const correctionInput = {
   ...ordinaryInput,
@@ -187,7 +221,7 @@ export const correctionInput = {
   supersedes: validSummary.version_id,
   correctionReason: "修正公开摘要措辞"
 };
-export const payload = { ...summaryDraft, source_tree_hash: existingHash };
+export const payload = { ...ordinaryInput.summaryDraft, source_tree_hash: existingHash };
 
 const run = promisify(execFile);
 async function commitAll(repoRoot: string, message: string): Promise<string> {

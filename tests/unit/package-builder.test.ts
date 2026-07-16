@@ -106,6 +106,27 @@ describe("immutable package builder", () => {
     expect((await auditSite(root)).ok).toBe(true);
   });
 
+  it("rejects a collapsed new candidate before writing a package", async () => {
+    const root = await copyFixture("valid");
+    const summaryDraft = structuredClone(ordinaryInput.summaryDraft);
+    for (const row of summaryDraft.advice_matrix) {
+      for (const cell of row.cells) {
+        cell.action = "降低风险暴露，避免追逐连板行情。";
+        cell.action_class = "reduce";
+        cell.conditions = [];
+        cell.risk = "高乖离、高波动与开板后的流动性风险。";
+      }
+    }
+    await expect(
+      buildPackage({
+        ...ordinaryInput,
+        siteRoot: root,
+        sourceTreeHash: HASH_C,
+        summaryDraft
+      })
+    ).rejects.toThrow("DEGENERATE_ADVICE_MATRIX");
+  });
+
   it("creates a correction and supersedes the prior current leaf", async () => {
     const root = await copyFixture("valid");
     const result = await buildPackage({

@@ -15,7 +15,7 @@ describe("immutable site view models", () => {
     const priorVersion = "20260712-120000-bbbbbbbb";
     const packageRoot = join(root, "reports/002050-sz/2026-07-12", priorVersion);
     const priorSummary = JSON.parse(await readFile(join(packageRoot, "summary.json"), "utf8"));
-    const { version_id, content_hash, publication_date, ...summaryDraft } = priorSummary;
+    const { version_id } = priorSummary;
     const correction = await buildPackage({
       ...ordinaryInput,
       mode: "correction",
@@ -23,7 +23,11 @@ describe("immutable site view models", () => {
       sourceMarkdownPath: join(packageRoot, "complete_report.md"),
       sourceTreeHash: HASH_B,
       sourceDisplayTimestamp: "20260712_120000",
-      summaryDraft: { ...summaryDraft, conclusion: "修订后的合成结论。" },
+      summaryDraft: {
+        ...ordinaryInput.summaryDraft,
+        analysis_date: priorSummary.analysis_date,
+        conclusion: "修订后的合成结论。"
+      },
       supersedes: version_id,
       correctionReason: "修正公开摘要措辞"
     });

@@ -13,6 +13,7 @@ import {
   SummarySchema,
   type Summary
 } from "./contracts";
+import { assertCandidateQuality } from "./candidate-quality";
 import { sha256Bytes } from "./crypto";
 import { replayAllLineages, type LifecycleStatus } from "./lifecycle";
 import { loadSiteRepository } from "./repository";
@@ -199,6 +200,8 @@ export async function buildPackage(input: PackageBuildInput): Promise<PackageBui
     if (!targetPackage) throw failure("INVALID_CORRECTION_TARGET");
     sourceDisplayTimestamp = targetPackage.manifest.source_display_timestamp;
   }
+
+  assertCandidateQuality(input.summaryDraft);
 
   const contentHash = computeContentHash(publicPayload(input));
   for (const loadedPackage of repository.packages.values()) {
