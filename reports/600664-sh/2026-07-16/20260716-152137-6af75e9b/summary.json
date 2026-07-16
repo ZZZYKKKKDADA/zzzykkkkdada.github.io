@@ -1,0 +1,190 @@
+{
+  "schema_version": 2,
+  "ticker": "600664.SH",
+  "ticker_slug": "600664-sh",
+  "company": "哈药集团股份有限公司",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "version_id": "20260716-152137-6af75e9b",
+  "source_tree_hash": "24639f9a9edec9de615454ad4a254c1128d6929b4604a34aa05169dfb3c35845",
+  "content_hash": "6af75e9b6d62091da6f684645c7931b83c53c655e00af99c1bcccee07993c2df",
+  "supersedes": null,
+  "correction_reason": null,
+  "rating": "Underweight",
+  "conclusion": "报告认为业绩预增提供基本面支撑，但五连板后的高乖离、高波动及中报前利润质量验证缺口更具决定性；当前宜降低风险暴露，不追涨。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "降低风险暴露，避免追逐连板行情。",
+          "action_class": "reduce",
+          "conditions": [],
+          "risk": "高乖离、高波动与开板后的流动性风险。"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "insufficient_evidence",
+      "metrics": []
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "insufficient_evidence",
+      "metrics": []
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "insufficient_evidence",
+      "metrics": []
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "insufficient_evidence",
+      "metrics": []
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "insufficient_evidence",
+      "metrics": []
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至分析日期的历史研究快照。",
+    "ai_assisted": "内容由 AI 辅助整理。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex 不是访问控制。"
+  },
+  "report_route": "/stocks/600664-sh/2026-07-16/20260716-152137-6af75e9b/",
+  "download_route": "/reports/600664-sh/2026-07-16/20260716-152137-6af75e9b/complete_report.md"
+}

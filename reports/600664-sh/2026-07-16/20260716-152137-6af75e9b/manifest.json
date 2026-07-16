@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "600664.SH",
+  "ticker_slug": "600664-sh",
+  "company": "哈药集团股份有限公司",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "source_display_timestamp": "20260716_152137",
+  "version_id": "20260716-152137-6af75e9b",
+  "source_tree_hash": "24639f9a9edec9de615454ad4a254c1128d6929b4604a34aa05169dfb3c35845",
+  "content_hash": "6af75e9b6d62091da6f684645c7931b83c53c655e00af99c1bcccee07993c2df",
+  "summary_sha256": "ff109d264016dd0ccd94641de8ff88517152bbe8792a3cce1f4e46563b533335",
+  "complete_report_sha256": "bbe67449f5b2fd577200aac3f5ca9ddb60cbc62130e7d59b1dffe9e052c6eb7f",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/600664-sh/2026-07-16/20260716-152137-6af75e9b/",
+  "download_route": "/reports/600664-sh/2026-07-16/20260716-152137-6af75e9b/complete_report.md"
+}
