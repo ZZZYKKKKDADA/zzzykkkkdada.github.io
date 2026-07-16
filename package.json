@@ -8,7 +8,7 @@
     "check": "astro check",
     "test": "vitest run",
     "test:stale": "tsx scripts/check-stale-schema.ts",
-    "test:e2e": "playwright test",
+    "test:e2e": "tsx scripts/run-e2e.ts",
     "build": "npm run audit && astro build",
     "dev": "astro dev",
     "preview": "astro preview"
