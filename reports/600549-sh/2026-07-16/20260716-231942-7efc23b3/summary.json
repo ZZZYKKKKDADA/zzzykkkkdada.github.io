@@ -1,0 +1,281 @@
+{
+  "schema_version": 2,
+  "ticker": "600549.SH",
+  "ticker_slug": "600549-sh",
+  "company": "厦门钨业",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "version_id": "20260716-231942-7efc23b3",
+  "source_tree_hash": "9a0c000a00b8a43644186ddd98ab63be6ebeb0bf36e63fe87a06c7040ee5dfaf",
+  "content_hash": "7efc23b3cd821b0f244b2ca1d01f2442b891a70209452ec62a19089dc9964d68",
+  "supersedes": null,
+  "correction_reason": null,
+  "rating": "Underweight",
+  "conclusion": "报告认为盈利预增强劲，但现金转换、营运资本、短债与弱势趋势尚未通过中报验证；未持仓者继续等待，已持仓者应削减超出风险预算的仓位，并以中报质量和趋势修复决定是否恢复配置。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "保持空仓，不把50.71—51.45元技术区间当作抢反弹入口。",
+          "action_class": "avoid",
+          "conditions": [
+            "短期趋势仍弱且尚未形成止跌确认"
+          ],
+          "risk": "高ATR可能令技术支撑在正常波动中被击穿。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "继续等待，在收盘未重返64.09元且MACD负柱未收窄前不建短线仓位。",
+          "action_class": "avoid",
+          "conditions": [
+            "股价仍低于10日EMA 64.09元",
+            "MACD动能尚未改善"
+          ],
+          "risk": "仅凭RSI偏低介入可能遭遇弱势钝化和继续回撤。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "暂不建仓；正式中报确认现金流改善并出现趋势止跌后，才考虑小额试仓。",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "经营现金流较一季度明显改善",
+            "存货与应收周转受控",
+            "价格形成止跌信号"
+          ],
+          "risk": "利润增长可能仍受商品价格和营运资金占用影响。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "维持空仓，直至中报质量与64.09—65.10元均线区间同时完成验证。",
+          "action_class": "avoid",
+          "conditions": [
+            "现金转换和短债压力获得验证",
+            "日线有效站稳64.09—65.10元"
+          ],
+          "risk": "等待双重确认可能错过部分反弹，但可降低误判趋势修复的风险。"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "保留轻仓但停止补仓；反弹至64.09—65.10元未站稳时卖出部分仓位。",
+          "action_class": "reduce",
+          "conditions": [
+            "反弹未能日线有效站稳均线区间",
+            "量能或MACD没有同步改善"
+          ],
+          "risk": "技术性反弹可能短暂越过均线，分批执行仍有价格偏差。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "维持小仓观察，不因接近50.71—51.45元风险区而追加仓位。",
+          "action_class": "hold",
+          "conditions": [
+            "现有仓位已显著低于基准且未使用杠杆"
+          ],
+          "risk": "支撑带窄于ATR，单日波动可能迅速扩大浮亏。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "轻仓等待中报，现金流与营运资本改善后再逐步恢复至基准配置。",
+          "action_class": "conditional_add",
+          "conditions": [
+            "经营现金流明显修复",
+            "存货和应收增速受控",
+            "短期借款压力未恶化"
+          ],
+          "risk": "正式中报可能证实利润现金含量仍不足，恢复仓位需分步进行。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "把轻仓作为上限；现金流、库存、应收或短债任一恶化时继续退出。",
+          "action_class": "reduce",
+          "conditions": [
+            "中报出现现金流继续疲弱、减值扩大、应收恶化或短债攀升之一"
+          ],
+          "risk": "多项风险可能在商品价格反转时同时放大。"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "立即削减至低于基准的小仓位，反弹未收复64.09—65.10元时继续分批减持。",
+          "action_class": "reduce",
+          "conditions": [
+            "当前仓位高于报告建议的低配水平",
+            "反弹未有效收复均线区间"
+          ],
+          "risk": "在55—56元附近快速减仓可能承受高波动区的执行损失。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "先降一档仓位并取消杠杆，避免在5.58元ATR环境中维持中等敞口。",
+          "action_class": "reduce",
+          "conditions": [
+            "当前仍有杠杆或仓位超过既定风险预算"
+          ],
+          "risk": "波动率较高，杠杆会放大支撑失效后的损失。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "压缩至轻仓保留验证权，仅在中报质量与趋势同步改善后恢复配置。",
+          "action_class": "reduce",
+          "conditions": [
+            "中报现金转换改善",
+            "库存和应收周转可控",
+            "股价趋势出现修复"
+          ],
+          "risk": "盈利预告强劲但尚不能抵消现金流和资产负债表不确定性。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "将中等仓位降至防御水平；连续失守50.71—51.45元并伴随动能恶化时再减仓。",
+          "action_class": "reduce",
+          "conditions": [
+            "连续收盘失守风险区",
+            "放量或MACD进一步恶化"
+          ],
+          "risk": "机械依赖单日价位可能误判，因此需结合连续收盘与动能确认。"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "优先快速卖出超出风险预算的重仓，反弹至64.09—65.10元未站稳时继续减仓。",
+          "action_class": "reduce",
+          "conditions": [
+            "持仓显著超过基准或风险预算",
+            "反弹缺乏量能与MACD改善"
+          ],
+          "risk": "集中仓位会同步放大商品周期、趋势和流动性风险。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "分批把重仓降到显著低于基准，并立即停止补仓、摊低成本和使用杠杆。",
+          "action_class": "reduce",
+          "conditions": [
+            "现金转换、库存质量和短债滚续仍待中报确认"
+          ],
+          "risk": "分批速度过慢可能在趋势继续走弱时保留过多敞口。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "先解除集中暴露，再由中报现金转换和趋势修复决定是否恢复正常仓位。",
+          "action_class": "reduce",
+          "conditions": [
+            "经营现金流改善",
+            "营运资本压力缓解",
+            "价格趋势完成止跌修复"
+          ],
+          "risk": "过早恢复重仓会把尚未验证的高利润当作已确认的安全边际。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "重仓应降至小仓或防御性水平；现金流继续疲弱或短债上升时进一步退出。",
+          "action_class": "reduce",
+          "conditions": [
+            "中报经营现金流未改善或短期借款继续攀升"
+          ],
+          "risk": "融资依赖与营运资金占用可能在价格回落时共同挤压偿债缓冲。"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收盘价 / 10日EMA / 50日SMA",
+          "source_value": "55.67 / 64.09 / 65.10",
+          "unit": "元",
+          "as_of_date": "2026-07-16",
+          "interpretation": "收盘价同时低于短期与中期均线，短中期趋势承压。",
+          "decision_impact": "在均线区间被有效收复前，反弹更适合作为减仓检验而非加仓确认。"
+        }
+      ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "MACD / 信号线 / 柱状图与RSI",
+          "source_value": "-2.92 / 0.16 / -3.09；RSI 34.80",
+          "unit": "指标值",
+          "as_of_date": "2026-07-16",
+          "interpretation": "MACD位于信号线下方且负柱明显，RSI接近但尚未进入传统超卖区。",
+          "decision_impact": "不能仅以RSI偏低抄底，应等待负柱收窄和价格止跌共同确认。"
+        }
+      ]
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "PE（TTM）/ PB",
+          "source_value": "29.14 / 4.83",
+          "unit": "倍",
+          "as_of_date": "2026-07-16",
+          "interpretation": "股价虽已明显回撤，但估值仍要求利润持续性和现金质量得到验证。",
+          "decision_impact": "估值不足以单独构成安全边际，当前更适合低配并等待中报。"
+        }
+      ]
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "归母净利润 / 经营现金流 / 自由现金流",
+          "source_value": "11.07 / -25.70 / -31.20",
+          "unit": "亿元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "一季度利润增长尚未转化为经营现金，利润与现金流存在显著背离。",
+          "decision_impact": "正式中报的现金转换改善是恢复基准配置的核心前提。"
+        }
+      ]
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "货币资金 / 短期借款 / 速动比率",
+          "source_value": "52.11 / 106.12 / 0.64",
+          "unit": "亿元 / 亿元 / 倍",
+          "as_of_date": "2026-03-31",
+          "interpretation": "短期借款高于货币资金，速动偿债缓冲较弱并依赖回款、存货变现和融资。",
+          "decision_impact": "高仓位和杠杆不合适，应持续跟踪短债、库存与应收变化。"
+        }
+      ]
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至分析日期的历史研究快照。",
+    "ai_assisted": "内容由 AI 辅助整理。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex 不是访问控制。"
+  },
+  "report_route": "/stocks/600549-sh/2026-07-16/20260716-231942-7efc23b3/",
+  "download_route": "/reports/600549-sh/2026-07-16/20260716-231942-7efc23b3/complete_report.md"
+}

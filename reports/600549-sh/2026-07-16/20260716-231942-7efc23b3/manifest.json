@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "600549.SH",
+  "ticker_slug": "600549-sh",
+  "company": "厦门钨业",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "source_display_timestamp": "20260716_231942",
+  "version_id": "20260716-231942-7efc23b3",
+  "source_tree_hash": "9a0c000a00b8a43644186ddd98ab63be6ebeb0bf36e63fe87a06c7040ee5dfaf",
+  "content_hash": "7efc23b3cd821b0f244b2ca1d01f2442b891a70209452ec62a19089dc9964d68",
+  "summary_sha256": "e84735c0c1d8046e3df9ada85065dce1f5f8794748d3b57e15409391f3d8e616",
+  "complete_report_sha256": "debdd76004d00ad7dd7685381ca4abe4a8b0c313dbd25da389164c8ec03c66ea",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/600549-sh/2026-07-16/20260716-231942-7efc23b3/",
+  "download_route": "/reports/600549-sh/2026-07-16/20260716-231942-7efc23b3/complete_report.md"
+}
