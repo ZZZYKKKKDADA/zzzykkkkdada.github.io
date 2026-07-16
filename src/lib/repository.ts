@@ -18,6 +18,8 @@ export interface LoadedPackage {
   root: string;
   summary: Summary;
   manifest: Manifest;
+  summaryBytes: Uint8Array;
+  manifestBytes: Uint8Array;
   markdown: Uint8Array;
   publicContentFindings: readonly PublicContentFinding[];
 }
@@ -160,7 +162,15 @@ async function loadPackage(root: string, manifestPath: string): Promise<LoadedPa
 
   const packagePath = relative(root, packageRoot).split(sep).join("/");
   assertPackageIdentity(summary, manifest, packagePath);
-  return { root: packageRoot, summary, manifest, markdown, publicContentFindings };
+  return {
+    root: packageRoot,
+    summary,
+    manifest,
+    summaryBytes,
+    manifestBytes,
+    markdown,
+    publicContentFindings
+  };
 }
 
 function parseEvents(bytes: Uint8Array): {

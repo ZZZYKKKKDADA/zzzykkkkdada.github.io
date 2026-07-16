@@ -97,6 +97,25 @@ test("download is byte-identical Markdown with a safe media type", async ({ requ
   );
 });
 
+test("summary and manifest endpoints expose byte-identical JSON packages", async ({ request }) => {
+  const packageRoot = validDownloadRoute.replace(/\/complete_report\.md$/, "");
+  const [summary, manifest] = await Promise.all([
+    request.get(`${packageRoot}/summary.json`),
+    request.get(`${packageRoot}/manifest.json`)
+  ]);
+
+  expect(summary.status()).toBe(200);
+  expect(summary.headers()["content-type"]).toContain("application/json");
+  expect(createHash("sha256").update(await summary.body()).digest("hex")).toBe(
+    validManifest.summary_sha256
+  );
+  expect(manifest.status()).toBe(200);
+  expect(manifest.headers()["content-type"]).toContain("application/json");
+  expect(createHash("sha256").update(await manifest.body()).digest("hex")).toBe(
+    createHash("sha256").update(JSON.stringify(validManifest, null, 2) + "\n").digest("hex")
+  );
+});
+
 test("emergency withdrawal has no download", async ({ request }) => {
   expect((await request.get(emergencyDownloadRoute)).status()).toBe(404);
 });
