@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "600664.SH",
+  "ticker_slug": "600664-sh",
+  "company": "哈药集团股份有限公司",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "source_display_timestamp": "20260716_152137",
+  "version_id": "20260716-152137-ba4494d3",
+  "source_tree_hash": "24639f9a9edec9de615454ad4a254c1128d6929b4604a34aa05169dfb3c35845",
+  "content_hash": "ba4494d37cad22750f7e26f877bda7fb07e71ee68fb1a5aacd7bce7bdfe31050",
+  "summary_sha256": "80a5c67070ae55ca990a782ff3b23bc6750d39015ad4ee19fcce2e916db962ae",
+  "complete_report_sha256": "bbe67449f5b2fd577200aac3f5ca9ddb60cbc62130e7d59b1dffe9e052c6eb7f",
+  "publisher_version": "0.1.0",
+  "supersedes": "20260716-152137-6af75e9b",
+  "correction_reason": "补充报告已包含的指标，并按仓位与期限细化操作建议矩阵。",
+  "report_route": "/stocks/600664-sh/2026-07-16/20260716-152137-ba4494d3/",
+  "download_route": "/reports/600664-sh/2026-07-16/20260716-152137-ba4494d3/complete_report.md"
+}

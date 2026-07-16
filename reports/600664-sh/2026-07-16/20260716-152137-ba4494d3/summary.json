@@ -1,0 +1,355 @@
+{
+  "schema_version": 2,
+  "ticker": "600664.SH",
+  "ticker_slug": "600664-sh",
+  "company": "哈药集团股份有限公司",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "version_id": "20260716-152137-ba4494d3",
+  "source_tree_hash": "24639f9a9edec9de615454ad4a254c1128d6929b4604a34aa05169dfb3c35845",
+  "content_hash": "ba4494d37cad22750f7e26f877bda7fb07e71ee68fb1a5aacd7bce7bdfe31050",
+  "supersedes": "20260716-152137-6af75e9b",
+  "correction_reason": "补充报告已包含的指标，并按仓位与期限细化操作建议矩阵。",
+  "rating": "Underweight",
+  "conclusion": "业绩预增提供基本面支撑，但五连板后的高乖离、高波动和利润质量验证缺口更具决定性；已有仓位宜降至轻仓，未持仓者不追涨。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "保持空仓，待开板后波动收敛再考虑极小试仓",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "开板后承接稳定，且价格与10日EMA和VWMA的乖离明显收窄"
+          ],
+          "risk": "五连板后追入可能遭遇跳空和流动性收缩。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "继续观望，不在4.49元附近追逐连板行情",
+          "action_class": "avoid",
+          "conditions": [
+            "至少等待开板换手和短期波动下降"
+          ],
+          "risk": "当前价格显著高于短期均线和布林上轨。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "等待中报验证后再建立观察性轻仓",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "扣非利润、医药工业收入或毛利率与经营现金流未明显背离"
+          ],
+          "risk": "预告利润含非经常性收益，持续性尚未拆分确认。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "暂不建立战略仓位，保留中报后重新评估资格",
+          "action_class": "avoid",
+          "conditions": [
+            "中报同时改善利润质量、现金回款和营运周转后再评估"
+          ],
+          "risk": "应收与存货占用较高，盈利改善尚未转化为已验证现金质量。"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "维持轻仓但不回补，开板失去承接时立即再减仓",
+          "action_class": "hold",
+          "conditions": [
+            "仅在价格仍守住短期趋势且ATR开始回落时维持"
+          ],
+          "risk": "轻仓限制损失金额，但不能消除开板成交风险。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "分批锁定浮盈，将轻仓压至最低观察敞口",
+          "action_class": "reduce",
+          "conditions": [
+            "若放量开板或MACD柱持续收窄则优先执行"
+          ],
+          "risk": "延迟止盈可能在拥挤交易反转时失去执行窗口。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "保留有限轻仓，等待中报后决定是否恢复基准配置",
+          "action_class": "hold",
+          "conditions": [
+            "中报确认主营修复且价格乖离和拥挤度同步收敛"
+          ],
+          "risk": "经营改善可能延续，但当前估值已计入较多乐观预期。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "维持最低跟踪仓，不因政策叙事或继续封板加仓",
+          "action_class": "hold",
+          "conditions": [
+            "目录品种、收入贡献和招采节奏披露前不提高权重"
+          ],
+          "risk": "基药目录调整缺少可量化财务影响。"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "立即分批降至轻仓，仅保留受限的上涨参与权",
+          "action_class": "reduce",
+          "conditions": [
+            "按可交易流动性分批执行，不在涨停打开后集中卖出"
+          ],
+          "risk": "中等仓位会放大开板后的非线性回撤。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "优先兑现连板浮盈，并停止任何新增风险暴露",
+          "action_class": "reduce",
+          "conditions": [
+            "若跌破10日EMA约3.60元且无法修复则继续降低"
+          ],
+          "risk": "技术确认可能滞后于获利盘集中兑现。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "降至低于基准配置，中报验证后才考虑逐步回升",
+          "action_class": "reduce",
+          "conditions": [
+            "扣非利润、工业收入或毛利率和现金流至少没有明显背离"
+          ],
+          "risk": "二季度利润改善尚不能证明跨季度持续性。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "把中等仓位降为防守性轻仓，等待利润质量确认",
+          "action_class": "reduce",
+          "conditions": [
+            "经营现金流显著改善且应收和存货周转未继续恶化"
+          ],
+          "risk": "现金高于短债不等同于主营盈利质量已经改善。"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "快速降低集中度至轻仓，不使用杠杆维持连板敞口",
+          "action_class": "reduce",
+          "conditions": [
+            "利用现有可交易流动性分段退出过量仓位"
+          ],
+          "risk": "重仓叠加涨停开板会造成退出价格和速度失控。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "将重仓降至最低风险暴露，避免等待单一指标确认",
+          "action_class": "reduce",
+          "conditions": [
+            "开板后承接不足时不等待MACD或均线滞后信号"
+          ],
+          "risk": "RSI、ATR和价格乖离共同显示拥挤与高波动。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "先降至低于基准权重，再以中报结果决定是否重建核心仓",
+          "action_class": "reduce",
+          "conditions": [
+            "主营扣非、毛利率、现金流和周转一致改善后才重建"
+          ],
+          "risk": "当前重仓依赖尚未验证的利润持续性假设。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "退出绝大部分集中仓位，仅保留不影响组合的跟踪敞口",
+          "action_class": "reduce",
+          "conditions": [
+            "若利润依赖非经常性项目或现金流继续落后则进一步退出"
+          ],
+          "risk": "高集中度会把单一预告和流动性事件放大为组合尾部风险。"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收盘价与10日EMA",
+          "source_value": "4.49 / 3.60",
+          "unit": "元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "收盘价显著高于短期均线。",
+          "decision_impact": "趋势偏强但乖离扩大，不支持追高。"
+        },
+        {
+          "name": "收盘价与50日SMA",
+          "source_value": "4.49 / 3.34",
+          "unit": "元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "价格位于中期均线之上。",
+          "decision_impact": "中期结构改善，可保留有限跟踪价值。"
+        },
+        {
+          "name": "收盘价与200日SMA",
+          "source_value": "4.49 / 3.55",
+          "unit": "元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "价格高于长期均线。",
+          "decision_impact": "长期趋势未破坏，但不能抵消短期拥挤风险。"
+        }
+      ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "MACD",
+          "source_value": "0.17 / 0.01 / 0.15",
+          "unit": "指标值",
+          "as_of_date": "2026-07-15",
+          "interpretation": "MACD高于信号线且柱状图为正。",
+          "decision_impact": "动量仍强，减仓宜分批而非机械一次清仓。"
+        },
+        {
+          "name": "RSI",
+          "source_value": "81.69",
+          "unit": "点",
+          "as_of_date": "2026-07-15",
+          "interpretation": "高于常用70超买阈值。",
+          "decision_impact": "不单独构成卖出信号，但显著降低追涨性价比。"
+        }
+      ]
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "滚动市盈率",
+          "source_value": "36.50",
+          "unit": "倍",
+          "as_of_date": "2026-07-15",
+          "interpretation": "TTM口径已反映部分利润修复预期。",
+          "decision_impact": "尚未拆分的预告利润不足以提供充分安全边际。"
+        },
+        {
+          "name": "市净率",
+          "source_value": "1.93",
+          "unit": "倍",
+          "as_of_date": "2026-07-15",
+          "interpretation": "账面估值不极端。",
+          "decision_impact": "只能辅助判断，不能替代盈利质量验证。"
+        },
+        {
+          "name": "滚动市销率",
+          "source_value": "0.71",
+          "unit": "倍",
+          "as_of_date": "2026-07-15",
+          "interpretation": "收入倍数不高。",
+          "decision_impact": "低PS不等于低风险，利润率和现金转化仍关键。"
+        }
+      ]
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "2026Q1归母净利润",
+          "source_value": "1.61",
+          "unit": "亿元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "同比下降约24.3%。",
+          "decision_impact": "一季度盈利承压，需中报确认二季度改善质量。"
+        },
+        {
+          "name": "2026Q1扣非利润",
+          "source_value": "1.53",
+          "unit": "亿元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "同比下降约25.0%。",
+          "decision_impact": "扣非修复是判断主营反转的重要条件。"
+        },
+        {
+          "name": "2026Q1毛利率",
+          "source_value": "24.11",
+          "unit": "%",
+          "as_of_date": "2026-07-15",
+          "interpretation": "同比下降约2.55个百分点。",
+          "decision_impact": "毛利率回升前不宜提高核心配置。"
+        },
+        {
+          "name": "2026Q1经营现金流",
+          "source_value": "-1.86",
+          "unit": "亿元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "同比改善但仍为净流出。",
+          "decision_impact": "利润与现金回款匹配决定本轮重估持续性。"
+        }
+      ]
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "货币资金与短期借款",
+          "source_value": "31.82 / 10.21",
+          "unit": "亿元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "货币资金高于短期借款。",
+          "decision_impact": "短债压力可控，但不代表经营质量已改善。"
+        },
+        {
+          "name": "应收账款",
+          "source_value": "48.38",
+          "unit": "亿元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "应收规模较高。",
+          "decision_impact": "回款效率是中报后调整仓位的核心验证项。"
+        },
+        {
+          "name": "存货",
+          "source_value": "21.61",
+          "unit": "亿元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "同比增长约18.4%。",
+          "decision_impact": "库存周转恶化将削弱利润改善的含金量。"
+        },
+        {
+          "name": "ATR",
+          "source_value": "0.19",
+          "unit": "元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "约对应股价4%的单日真实波幅。",
+          "decision_impact": "高波动要求降低仓位与杠杆，并预留执行偏差。"
+        }
+      ]
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至2026年7月16日的历史研究快照。",
+    "ai_assisted": "内容由AI辅助整理，并按报告证据校验。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex不是访问控制。"
+  },
+  "report_route": "/stocks/600664-sh/2026-07-16/20260716-152137-ba4494d3/",
+  "download_route": "/reports/600664-sh/2026-07-16/20260716-152137-ba4494d3/complete_report.md"
+}
