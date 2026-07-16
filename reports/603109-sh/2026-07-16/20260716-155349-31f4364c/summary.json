@@ -1,0 +1,347 @@
+{
+  "schema_version": 2,
+  "ticker": "603109.SH",
+  "ticker_slug": "603109-sh",
+  "company": "神驰机电股份有限公司",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "version_id": "20260716-155349-31f4364c",
+  "source_tree_hash": "a37e9737c949fcea2386ffcc1e8de94ad1aaa2ec15ec63a57130271e78cdd5ad",
+  "content_hash": "31f4364c00bcc3bbe04b3295e168f06aa156c68cf81fac8574aeb58eb3214ae6",
+  "supersedes": null,
+  "correction_reason": null,
+  "rating": "Sell",
+  "conclusion": "盈利质量、现金转换和中长期趋势均未确认修复；现有多头仓位宜分批降至低于基准，基本面与量价共同改善前不恢复配置。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "保持空仓，不因MACD柱体转正参与弱势反弹",
+          "action_class": "avoid",
+          "conditions": [
+            "仅在日线放量站稳16.62至16.88元后重新评估短线机会"
+          ],
+          "risk": "零轴下方的MACD和不足的成交量可能使反弹再次转弱。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "继续观望，等待价格与成交量同时确认修复",
+          "action_class": "avoid",
+          "conditions": [
+            "价格站稳16.88元且量能显著改善后再复核"
+          ],
+          "risk": "当前价格仍低于短中长期均线，过早入场缺少趋势保护。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "中报验证前不建仓，满足双重条件后才试探进入",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "中报多数改善毛利率、财务费用、经营现金流和营运资本，同时价格放量站稳16.62至16.88元"
+          ],
+          "risk": "盈利修复尚未发生，39.56倍市盈率对预期落空较敏感。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "维持零配置，待上调至持有后再讨论基准仓位",
+          "action_class": "avoid",
+          "conditions": [
+            "基本面和量价共同确认并由报告条件触发上调至Hold"
+          ],
+          "risk": "利润率与现金转换连续恶化可能带来估值和业绩双重压力。"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "在16.56元附近分批减持轻仓，仅保留受限跟踪敞口",
+          "action_class": "reduce",
+          "conditions": [
+            "日线有效跌破并收于15.65元下方时进一步压缩"
+          ],
+          "risk": "下轨失守可能使弱势结构重新主导并扩大残余损失。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "将轻仓控制在常规目标仓位的20%以内且不补仓",
+          "action_class": "hold",
+          "conditions": [
+            "只在研究或授权要求保留跟踪仓时维持该上限"
+          ],
+          "risk": "短线动能缓和不等于趋势见底，跟踪仓仍承受下行风险。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "先压低轻仓权重，以中报结果决定是否恢复配置",
+          "action_class": "reduce",
+          "conditions": [
+            "毛利率止跌、财务费用缓解且经营现金流和营运资本多数改善后再增配"
+          ],
+          "risk": "潜在财务费用修复尚无证据，不能提前计入持仓价值。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "保留最小观察仓直至基本面和量价形成共同确认",
+          "action_class": "hold",
+          "conditions": [
+            "日线放量站稳重估区且中报验证完成前不提高仓位"
+          ],
+          "risk": "应收和存货占用可能继续削弱利润向现金的转化。"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "立即分批把中等仓位降至低于基准并停止摊低成本",
+          "action_class": "reduce",
+          "conditions": [
+            "利用16.56元附近的可交易窗口分段执行"
+          ],
+          "risk": "若等待反转确认才减仓，弱势趋势可能压缩可执行价格。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "按流动性有序减至不超过常规目标仓位20%的跟踪仓",
+          "action_class": "reduce",
+          "conditions": [
+            "跌破15.65元收盘确认后继续削减残余敞口"
+          ],
+          "risk": "一次性退出可能放大执行偏差，但保留过多仓位会扩大回撤。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "把中等仓位降到低配，待双重验证后再逐步恢复",
+          "action_class": "reduce",
+          "conditions": [
+            "中报四项指标多数改善且价格放量站稳16.62至16.88元"
+          ],
+          "risk": "收入增长尚未转化为利润增长，恢复过早会承担估值压缩。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "退出大部分中等仓位，仅保留不影响组合的研究敞口",
+          "action_class": "reduce",
+          "conditions": [
+            "完成3至6个月或中报复核前不恢复到基准权重"
+          ],
+          "risk": "盈利能力与经营现金流同时走弱会提高中期等待成本。"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "快速分段降低重仓集中度，不以短线反弹延迟卖出",
+          "action_class": "reduce",
+          "conditions": [
+            "优先在16.56元附近释放过量风险暴露"
+          ],
+          "risk": "重仓叠加中长期空头排列会放大价格与执行风险。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "将重仓降至低配并预设15.65元下方的二次压缩纪律",
+          "action_class": "reduce",
+          "conditions": [
+            "日线有效收于布林下轨下方即执行残余减仓"
+          ],
+          "risk": "ATR收缩可能只是下跌整理，不能作为重仓等待的安全依据。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "退出绝大部分重仓，仅在中报和趋势共振后重建",
+          "action_class": "reduce",
+          "conditions": [
+            "毛利率、财务费用、现金流与营运资本多数改善并放量站稳重估区"
+          ],
+          "risk": "高估值对尚未验证的盈利修复依赖较强，集中持有容错有限。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "把重仓压至不超过常规目标20%的跟踪上限并冻结加仓",
+          "action_class": "reduce",
+          "conditions": [
+            "报告评级上调至Hold前不解除仓位上限"
+          ],
+          "risk": "现金虽能覆盖直接借款，但不能抵消利润和现金转换恶化。"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收盘价与10日EMA",
+          "source_value": "16.56 / 16.62",
+          "unit": "元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "收盘略低于短期均线。",
+          "decision_impact": "短线尚未恢复到均衡偏强区。"
+        },
+        {
+          "name": "收盘价与50日及200日SMA",
+          "source_value": "16.56 / 19.07 / 24.32",
+          "unit": "元",
+          "as_of_date": "2026-07-15",
+          "interpretation": "价格显著低于中长期均线。",
+          "decision_impact": "中长期空头结构支持降低多头暴露。"
+        }
+      ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "MACD、信号线与柱体",
+          "source_value": "-0.76 / -0.86 / 0.10",
+          "unit": "指标值",
+          "as_of_date": "2026-07-15",
+          "interpretation": "柱体转正但MACD仍在零轴下方。",
+          "decision_impact": "下跌动能缓和，尚不足以确认中期反转。"
+        },
+        {
+          "name": "RSI",
+          "source_value": "40.37",
+          "unit": "点",
+          "as_of_date": "2026-07-15",
+          "interpretation": "已脱离极弱区但仍低于50。",
+          "decision_impact": "不支持把短线修复视为强势买入信号。"
+        }
+      ]
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "滚动市盈率",
+          "source_value": "39.56",
+          "unit": "倍",
+          "as_of_date": "2026-07-15",
+          "interpretation": "盈利下行期估值仍依赖后续修复。",
+          "decision_impact": "业绩兑现不足时存在估值压缩风险。"
+        },
+        {
+          "name": "市净率",
+          "source_value": "1.75",
+          "unit": "倍",
+          "as_of_date": "2026-07-15",
+          "interpretation": "账面估值未显示迫切偿债危机。",
+          "decision_impact": "不能抵消利润和现金转换恶化。"
+        },
+        {
+          "name": "滚动股息率",
+          "source_value": "1.49",
+          "unit": "%",
+          "as_of_date": "2026-07-15",
+          "interpretation": "股息回报有限。",
+          "decision_impact": "不足以为当前盈利风险提供充分持仓缓冲。"
+        }
+      ]
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "2025年营收与归母净利润",
+          "source_value": "29.28 / 1.34",
+          "unit": "亿元",
+          "as_of_date": "2025-12-31",
+          "interpretation": "营收同比增长6.88%，净利润同比下降30.94%。",
+          "decision_impact": "收入增长未转化为利润增长。"
+        },
+        {
+          "name": "2026Q1归母净利润",
+          "source_value": "2321.86",
+          "unit": "万元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "同比下降66.63%。",
+          "decision_impact": "盈利下滑在新年度仍未止住。"
+        },
+        {
+          "name": "2026Q1毛利率",
+          "source_value": "23.41",
+          "unit": "%",
+          "as_of_date": "2026-03-31",
+          "interpretation": "较上年同期下降约2.11个百分点。",
+          "decision_impact": "毛利率止跌是评级上调的必要验证项。"
+        },
+        {
+          "name": "2026Q1财务费用",
+          "source_value": "1447",
+          "unit": "万元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "由上年同期1312万元净收益转为费用。",
+          "decision_impact": "财务费用缓解前不能预设利润修复。"
+        }
+      ]
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "2026Q1经营现金流",
+          "source_value": "-3394",
+          "unit": "万元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "经营现金流仍为净流出。",
+          "decision_impact": "现金转换未改善前应维持低配。"
+        },
+        {
+          "name": "2026Q1应收账款",
+          "source_value": "6.40",
+          "unit": "亿元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "较年末增长约21.0%。",
+          "decision_impact": "回款压力增加了营运资本风险。"
+        },
+        {
+          "name": "2026Q1存货",
+          "source_value": "5.95",
+          "unit": "亿元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "较年末增长约4.6%。",
+          "decision_impact": "库存继续增加会占用现金并抬高减值风险。"
+        },
+        {
+          "name": "2026Q1资产负债率",
+          "source_value": "43.9",
+          "unit": "%",
+          "as_of_date": "2026-03-31",
+          "interpretation": "较年末改善且未显示过度杠杆。",
+          "decision_impact": "说明并非迫切偿债危机，但不改变减仓结论。"
+        }
+      ]
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至2026年7月16日的历史研究快照。",
+    "ai_assisted": "内容由AI辅助整理，并按报告证据校验。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex不是访问控制。"
+  },
+  "report_route": "/stocks/603109-sh/2026-07-16/20260716-155349-31f4364c/",
+  "download_route": "/reports/603109-sh/2026-07-16/20260716-155349-31f4364c/complete_report.md"
+}

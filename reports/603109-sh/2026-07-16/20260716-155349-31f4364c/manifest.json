@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "603109.SH",
+  "ticker_slug": "603109-sh",
+  "company": "神驰机电股份有限公司",
+  "market": "A股",
+  "analysis_date": "2026-07-16",
+  "publication_date": "2026-07-16",
+  "source_display_timestamp": "20260716_155349",
+  "version_id": "20260716-155349-31f4364c",
+  "source_tree_hash": "a37e9737c949fcea2386ffcc1e8de94ad1aaa2ec15ec63a57130271e78cdd5ad",
+  "content_hash": "31f4364c00bcc3bbe04b3295e168f06aa156c68cf81fac8574aeb58eb3214ae6",
+  "summary_sha256": "6855fcc517dbf814d81bda77b9be29ea45e2e62568fd2d8247002320122dd5f1",
+  "complete_report_sha256": "d4b44d43ec242bd0fcdc748c7fb50ddaeb52a0f7181c10fb06bcecbfac0f4bb2",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/603109-sh/2026-07-16/20260716-155349-31f4364c/",
+  "download_route": "/reports/603109-sh/2026-07-16/20260716-155349-31f4364c/complete_report.md"
+}
