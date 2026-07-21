@@ -1,0 +1,283 @@
+{
+  "schema_version": 2,
+  "ticker": "002371.SZ",
+  "ticker_slug": "002371-sz",
+  "company": "北方华创",
+  "market": "A股",
+  "analysis_date": "2026-07-21",
+  "publication_date": "2026-07-21",
+  "version_id": "20260721-112806-2973307c",
+  "source_tree_hash": "7bbf7571946883134aba2ca17c95e76d1db7ecb3a852b2dcb40b158bbf61d108",
+  "content_hash": "2973307caccabb203d52518f795d1d34b4c3e7940f1e08f1685358fab6fd6e27",
+  "supersedes": null,
+  "correction_reason": null,
+  "rating": "Underweight",
+  "conclusion": "报告认为002371.SZ仍具备国产半导体设备的长期成长与财务韧性，但当前估值、利润率、每股收益稀释、短中期趋势和板块资金面尚未支持正常或超配；已有持仓应分批降至低配区间，无持仓者等待盈利质量与趋势修复验证。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "继续空仓，避免在676.91元附近把急跌后的技术反抽当作追空或抢反弹信号。",
+          "action_class": "avoid",
+          "conditions": [
+            "价格仍低于50日均线699.45元",
+            "MACD柱体仍为负"
+          ],
+          "risk": "高ATR环境下双向波动可能造成追单和反向滑点。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "等待收盘重新站上699.45元并观察MACD负柱收窄，再决定是否参与短线交易。",
+          "action_class": "avoid",
+          "conditions": [
+            "尚未有效收复699.45元",
+            "板块资金流尚未改善"
+          ],
+          "risk": "弱势钝化期间仅凭低位价格入场可能承受继续回撤。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "不新建常规仓位；仅在中报确认利润率和现金流改善且价格收复699.45元后小额试仓。",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "毛利率和经营现金流连续改善",
+            "收盘有效收复699.45元"
+          ],
+          "risk": "高估值资产的盈利兑现不足可能使试仓仍面临估值压缩。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "维持空仓，直至价格先站稳743.01元且财务披露确认EPS稀释压力缓和。",
+          "action_class": "avoid",
+          "conditions": [
+            "价格站稳10日EMA 743.01元",
+            "EPS和经营现金流改善"
+          ],
+          "risk": "更晚确认会错过部分反弹，但可减少趋势反转误判。"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "保留轻仓观察但停止加仓，反弹至699.45元附近受阻时分批退出交易性仓位。",
+          "action_class": "reduce",
+          "conditions": [
+            "反弹未能站稳50日均线",
+            "MACD负柱没有收窄"
+          ],
+          "risk": "技术反抽的持续时间和成交价格存在不确定性。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "将轻仓限定为风险预算上限，不因接近660.68元布林下轨而追加仓位。",
+          "action_class": "hold",
+          "conditions": [
+            "现有仓位已低于基准",
+            "未使用杠杆"
+          ],
+          "risk": "布林下轨附近仍可能出现跌破后的加速波动。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "以轻仓等待中报验证，只有利润增速追上收入且资金面止稳才逐步恢复配置。",
+          "action_class": "conditional_add",
+          "conditions": [
+            "归母净利润增速改善",
+            "电子板块资金流由出转入"
+          ],
+          "risk": "单季改善若不能持续，恢复仓位会放大基本面误判。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "把轻仓作为上限；若收盘连续失守660.68元则继续削减而不摊低成本。",
+          "action_class": "reduce",
+          "conditions": [
+            "连续收盘跌破660.68元",
+            "RSI继续走弱或MACD负柱扩大"
+          ],
+          "risk": "支撑位失效时高波动会使被动减仓成本上升。"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "先降一档至低配，反弹无法收复743.01元时继续清理交易性敞口。",
+          "action_class": "reduce",
+          "conditions": [
+            "当前仓位超过低配目标",
+            "价格低于10日EMA"
+          ],
+          "risk": "分批减仓期间价格可能快速反弹或再次下探。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "取消杠杆并将中等仓位压缩至防御水平，避免以56.03元ATR承受过大日内波动。",
+          "action_class": "reduce",
+          "conditions": [
+            "存在融资或仓位超过风险预算",
+            "ATR仍高于常态"
+          ],
+          "risk": "杠杆解除与市场波动叠加可能造成执行偏离。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "保留研究仓但削减超出部分，待毛利率、EPS和回款连续改善后再恢复。",
+          "action_class": "reduce",
+          "conditions": [
+            "利润率尚未企稳",
+            "应收和存货周转仍待验证"
+          ],
+          "risk": "长期成长逻辑未失效但短期估值回撤可能继续。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "将中等仓位降至低配并设置连续收盘观察，660.68元失守且板块流出延续时再减。",
+          "action_class": "reduce",
+          "conditions": [
+            "价格连续低于布林下轨",
+            "电子行业资金持续净流出"
+          ],
+          "risk": "等待确认可能保留部分下行暴露。"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "优先卖出超出风险预算的重仓部分，避免把88.1倍PE的高估值暴露长期化。",
+          "action_class": "reduce",
+          "conditions": [
+            "仓位显著高于基准",
+            "利润率和EPS继续承压"
+          ],
+          "risk": "集中交易可能在高ATR时点产生较大价格冲击。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "分批解除重仓与杠杆，不使用集中市价单，并把总仓位降至25%-50%目标区间。",
+          "action_class": "reduce",
+          "conditions": [
+            "现金转换尚未跨季度确认",
+            "融资余额和板块资金仍收缩"
+          ],
+          "risk": "执行过慢会使重仓继续暴露于板块去杠杆。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "先解除集中暴露，仅在中报质量、技术趋势和资金面同步改善后恢复正常权重。",
+          "action_class": "reduce",
+          "conditions": [
+            "经营现金流连续为正",
+            "价格依次收复699.45元和743.01元"
+          ],
+          "risk": "过早恢复重仓会把潜在成长当成已验证的安全边际。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "把重仓降至小仓或防御性水平，若应收、存货或短债恶化则进一步退出。",
+          "action_class": "reduce",
+          "conditions": [
+            "应收和存货周转恶化",
+            "流动性指标或现金缓冲下降"
+          ],
+          "risk": "营运资本压力可能与估值收缩同时放大损失。"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收盘价与均线/量价位置",
+          "source_value": "676.91；10日EMA 743.01；50日SMA 699.45；200日SMA 516.68；VWMA 789.77",
+          "unit": "元",
+          "as_of_date": "2026-07-20",
+          "interpretation": "收盘低于10日EMA、50日SMA和VWMA，但仍高于200日SMA，表现为短中期承压而长期结构未被现有数据完全破坏。",
+          "decision_impact": "在收复699.45元和743.01元前维持低配，不能把反抽视为趋势反转。"
+        }
+      ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "MACD、RSI与ATR",
+          "source_value": "MACD 2.87；信号线28.18；柱体-25.32；RSI 40.65；ATR 56.03",
+          "unit": "指标值",
+          "as_of_date": "2026-07-20",
+          "interpretation": "MACD低于信号线且负柱明显，RSI尚未进入典型超卖区，ATR显示日内波动较高。",
+          "decision_impact": "不宜仅凭低位抄底；仓位和执行应匹配高波动，并等待负柱收窄。"
+        }
+      ]
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "TTM估值倍数",
+          "source_value": "PE-TTM 88.10；PB 12.50；PS-TTM 11.85",
+          "unit": "倍",
+          "as_of_date": "2026-07-20",
+          "interpretation": "估值仍处高位，市场需要持续的利润率、每股收益和现金流兑现才能消化预期。",
+          "decision_impact": "估值不构成安全边际，当前不支持正常或超配仓位。"
+        }
+      ]
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收入、利润率与经营现金流",
+          "source_value": "2026Q1收入103.23亿元、同比+25.8%；归母净利润16.35亿元、同比约+3.4%；毛利率40.77%；净利率15.19%；经营现金流7.48亿元（上年同期-17.29亿元）",
+          "unit": "亿元/百分比",
+          "as_of_date": "2026-03-31",
+          "interpretation": "收入和经营现金流改善，但利润增长明显落后收入且利润率走弱，现金转换仍需跨季度验证。",
+          "decision_impact": "中报需确认利润率、回款和现金流连续改善，才能提高配置。"
+        }
+      ]
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "现金、净负债与营运资本",
+          "source_value": "现金180.07亿元；净负债-24.81亿元；流动比率2.39；速动比率1.25；应收87.80亿元；存货286.03亿元；股本同比约+35.7%；基本EPS 2.2556元（前值2.9613元）",
+          "unit": "亿元/倍/百分比/元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "公司流动性和净现金状态较强，但应收、存货和股本扩张带来营运资本与每股价值风险。",
+          "decision_impact": "保留有限战略仓合理，但不应据此维持高权重；需跟踪回款、库存和EPS稀释。"
+        }
+      ]
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至分析日期的历史研究快照。",
+    "ai_assisted": "内容由AI辅助整理。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex不是访问控制。"
+  },
+  "report_route": "/stocks/002371-sz/2026-07-21/20260721-112806-2973307c/",
+  "download_route": "/reports/002371-sz/2026-07-21/20260721-112806-2973307c/complete_report.md"
+}
