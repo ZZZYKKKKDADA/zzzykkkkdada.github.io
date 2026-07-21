@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "002518.SZ",
+  "ticker_slug": "002518-sz",
+  "company": "科士达",
+  "market": "A股",
+  "analysis_date": "2026-07-21",
+  "publication_date": "2026-07-21",
+  "source_display_timestamp": "20260721_154807",
+  "version_id": "20260721-154807-180c7e5b",
+  "source_tree_hash": "e91ba2557afa2707d473c02f5edc5db747a37cc578c0044844c01fddc71e6eb6",
+  "content_hash": "180c7e5b540e903aa9e4721d7421bb0bd9f3cbffad47cd50709a4f17da3e03a1",
+  "summary_sha256": "876e7473823046aebee89bd72743fbdfb0b028c45f2d0e1c2af23382828d8422",
+  "complete_report_sha256": "fc2e98ef3cfaa97b0d348589dd3a5cf984e3631d5f22b7dbd255e27e15d8e38d",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/002518-sz/2026-07-21/20260721-154807-180c7e5b/",
+  "download_route": "/reports/002518-sz/2026-07-21/20260721-154807-180c7e5b/complete_report.md"
+}

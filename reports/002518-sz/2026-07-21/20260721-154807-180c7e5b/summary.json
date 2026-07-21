@@ -1,0 +1,283 @@
+{
+  "schema_version": 2,
+  "ticker": "002518.SZ",
+  "ticker_slug": "002518-sz",
+  "company": "科士达",
+  "market": "A股",
+  "analysis_date": "2026-07-21",
+  "publication_date": "2026-07-21",
+  "version_id": "20260721-154807-180c7e5b",
+  "source_tree_hash": "e91ba2557afa2707d473c02f5edc5db747a37cc578c0044844c01fddc71e6eb6",
+  "content_hash": "180c7e5b540e903aa9e4721d7421bb0bd9f3cbffad47cd50709a4f17da3e03a1",
+  "supersedes": null,
+  "correction_reason": null,
+  "rating": "Underweight",
+  "conclusion": "报告认为科士达仍有收入和利润增长，尚无已验证的经营衰退；但弱势趋势、估值容错、现金转换和营运资本压力不支持常规或高配。已有仓位应先降至低配并按条件管理，空仓者不追空也不以超卖为由建立反弹仓。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "继续空仓，不在31.89元附近追空，也不把RSI超卖当作抢反弹信号。",
+          "action_class": "avoid",
+          "conditions": [
+            "RSI为25.47且价格接近30.83元布林下轨",
+            "MACD负柱尚未连续收窄"
+          ],
+          "risk": "急跌后的技术反抽可能使追单产生反向滑点。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "等待收盘稳定回到38.33元上方并观察MACD负柱收窄后，再评估短线参与。",
+          "action_class": "avoid",
+          "conditions": [
+            "价格尚未稳定收复10日EMA 38.33元",
+            "MACD仍低于信号线"
+          ],
+          "risk": "等待确认会错过部分反抽，但可避免把超卖误判为趋势反转。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "不新建常规多头仓位；只在利润率、经营现金流和应收周转改善且趋势修复后小额试仓。",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "后续财报验证利润率和经营现金流改善",
+            "价格逐步修复中长期均线结构"
+          ],
+          "risk": "增长兑现不足可能使高估值继续承受再定价压力。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "维持无仓，直到资本开支效率和回款改善得到披露验证，并且价格不再处于均线系统下方。",
+          "action_class": "avoid",
+          "conditions": [
+            "应收周转和资本开支效率改善",
+            "价格不再低于10日、50日和200日均线"
+          ],
+          "risk": "更晚建仓会牺牲部分上行参与，但降低基本面与趋势同时失配的风险。"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "将轻仓分批削减，不等待反弹作为首轮风控前提。",
+          "action_class": "reduce",
+          "conditions": [
+            "价格低于38.33元10日EMA",
+            "MACD负柱未收窄"
+          ],
+          "risk": "ATR为3.06元时，分批执行仍可能遭遇较大日内波动。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "把轻仓限制在常规单股风险预算的50%以下，不因接近30.83元而向下补仓。",
+          "action_class": "hold",
+          "conditions": [
+            "现有仓位已低于风险预算",
+            "未出现价格与动量同步修复"
+          ],
+          "risk": "下轨失守后可能继续放大波动，低位并不等于支撑有效。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "保留有限观察仓，若有效跌破30.83元且MACD负柱扩大则继续减至极低配置。",
+          "action_class": "reduce",
+          "conditions": [
+            "收盘有效跌破30.83元",
+            "MACD负柱继续扩大"
+          ],
+          "risk": "剩余仓位仍暴露于趋势延续和估值压缩。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "停止新增轻仓，只有财报确认现金流、利润率和应收周转改善后才讨论恢复配置。",
+          "action_class": "conditional_add",
+          "conditions": [
+            "经营现金流持续改善",
+            "利润率与应收周转获得后续财报验证"
+          ],
+          "risk": "单季现金流转正未必代表全年现金转换已经改善。"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "先将中等仓位压缩至低配区间，优先处理超出风险预算的部分。",
+          "action_class": "reduce",
+          "conditions": [
+            "仓位高于个人单股风险预算",
+            "价格仍低于短中长期均线"
+          ],
+          "risk": "急跌阶段集中卖出可能放大执行成本。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "按预设批次把中等仓位降至常规单股仓位的40%至60%，避免把减仓完全押在反弹上。",
+          "action_class": "reduce",
+          "conditions": [
+            "31.89元附近处于高波动状态",
+            "10日EMA距离现价较远"
+          ],
+          "risk": "若反弹迟迟未发生，等待更好卖点会保留过多下行暴露。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "保留的中等仓位只可作为观察仓，未见利润率、现金流和资本开支效率同步改善前不恢复常规配置。",
+          "action_class": "hold",
+          "conditions": [
+            "后续披露未同时验证三项基本面改善",
+            "价格尚未修复中长期均线"
+          ],
+          "risk": "把增长叙事当成安全边际会忽视现金消耗和营运资本占用。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "若出现新增减持、业绩不及预期或应收回款恶化，继续将中等仓位降至低配甚至退出。",
+          "action_class": "reduce",
+          "conditions": [
+            "正式披露出现新增减持或业绩不及预期",
+            "应收回款出现恶化"
+          ],
+          "risk": "基本面风险与弱趋势叠加时，剩余仓位的回撤可能扩大。"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "立即削减重仓中的超预算部分，先把总体敞口降至常规单股风险预算以下。",
+          "action_class": "reduce",
+          "conditions": [
+            "仓位集中度高或明显超过风险预算",
+            "价格与MACD均未修复"
+          ],
+          "risk": "高集中度会放大弱趋势和高ATR环境下的组合回撤。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "将重仓分批降至约三分之一或更低，首轮不等待38.33元反弹。",
+          "action_class": "reduce",
+          "conditions": [
+            "风险承受能力较低或原仓位偏重",
+            "现价仍低于10日EMA 38.33元"
+          ],
+          "risk": "一次性在超卖区域清仓可能承受反抽和滑点，但延后风控也会扩大风险。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "重仓退出后不重新加码，只有利润率、经营现金流、应收周转和资本开支效率均改善时才重建。",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "四项财务验证同步改善",
+            "价格结构进一步修复"
+          ],
+          "risk": "过早重建重仓会在估值容错不足时放大错误成本。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "把剩余重仓降为可量化的低配观察仓，并在30.83元失守且动量恶化时继续退出。",
+          "action_class": "reduce",
+          "conditions": [
+            "收盘跌破30.83元",
+            "MACD负柱扩大或回款恶化"
+          ],
+          "risk": "历史减持带和均线压力会限制反弹赔率，观察仓仍需严格止损。"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收盘价与均线位置",
+          "source_value": "收盘31.89元；10日EMA 38.33元；50日SMA 49.95元；200日SMA 48.28元",
+          "unit": "元",
+          "as_of_date": "2026-07-20",
+          "interpretation": "价格同时低于短、中、长期均线，趋势过滤信号一致偏空。",
+          "decision_impact": "在价格稳定收复38.33元并继续修复均线结构前维持低配。"
+        }
+      ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "MACD、RSI、布林下轨与ATR",
+          "source_value": "MACD -4.41；信号线-3.09；RSI 25.47；布林下轨30.83元；ATR 3.06元",
+          "unit": "指标值/元",
+          "as_of_date": "2026-07-20",
+          "interpretation": "动量仍弱但已处于超卖和高波动区域，不能把超卖当作趋势反转。",
+          "decision_impact": "不追空也不抄底；若30.83元失守且负柱扩大则进一步减仓。"
+        }
+      ]
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "TTM市盈率与市净率",
+          "source_value": "PE-TTM约29.08；PB约3.73",
+          "unit": "倍",
+          "as_of_date": "2026-07-20",
+          "interpretation": "当前估值要求持续的高质量增长，未给现金转换和执行偏差提供充分容错。",
+          "decision_impact": "在利润率、现金流和订单验证前不支持常规或高配。"
+        }
+      ]
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收入、利润与经营现金流",
+          "source_value": "2026Q1收入12.40亿元、同比+31.46%；归母净利润1.386亿元、同比+24.84%；扣非利润同比+26.32%；经营现金流1.13亿元，2025Q1为-1.314亿元",
+          "unit": "亿元/百分比",
+          "as_of_date": "2026-03-31",
+          "interpretation": "经营仍在增长且现金流转正，但利润增速低于收入，单季现金转换仍需后续季度验证。",
+          "decision_impact": "财报需继续验证利润率和现金流改善，才考虑提高配置。"
+        }
+      ]
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "现金、投资现金流与营运资本",
+          "source_value": "现金及等价物由4.10亿元降至1.92亿元；投资现金流净流出3.17亿元；应收账款15.64亿元；存货11.10亿元",
+          "unit": "亿元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "现金、资本开支和营运资本占用仍需与后续回款和资本开支效率一起跟踪。",
+          "decision_impact": "若回款恶化或资本开支效率未改善，维持低配或继续降仓。"
+        }
+      ]
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至分析日期的历史研究快照。",
+    "ai_assisted": "内容由AI辅助整理。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex不是访问控制。"
+  },
+  "report_route": "/stocks/002518-sz/2026-07-21/20260721-154807-180c7e5b/",
+  "download_route": "/reports/002518-sz/2026-07-21/20260721-154807-180c7e5b/complete_report.md"
+}
