@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "002371.SZ",
+  "ticker_slug": "002371-sz",
+  "company": "北方华创",
+  "market": "A股",
+  "analysis_date": "2026-07-22",
+  "publication_date": "2026-07-22",
+  "source_display_timestamp": "20260722_104707",
+  "version_id": "20260722-104707-5bdbb2f7",
+  "source_tree_hash": "610073c6364405f13d072e5714e201417635a4e57d62af9320dc95635325e384",
+  "content_hash": "5bdbb2f7751a7afc9d204ca49c25aa7bfa15fb2c8525e03ebce49323421fdd5a",
+  "summary_sha256": "083804f7e02c390401fababb1105a30221b1795bba4109b40f288113b1283101",
+  "complete_report_sha256": "ddeebe69c43736906fd442bf1925e4fbcb108698f253f79ca630c646d2a50380",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/002371-sz/2026-07-22/20260722-104707-5bdbb2f7/",
+  "download_route": "/reports/002371-sz/2026-07-22/20260722-104707-5bdbb2f7/complete_report.md"
+}
