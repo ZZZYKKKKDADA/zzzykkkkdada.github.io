@@ -1,0 +1,283 @@
+{
+  "schema_version": 2,
+  "ticker": "603688.SH",
+  "ticker_slug": "603688-sh",
+  "company": "石英股份",
+  "market": "A股",
+  "analysis_date": "2026-07-22",
+  "publication_date": "2026-07-22",
+  "version_id": "20260722-111025-52a35ad1",
+  "source_tree_hash": "b0e33a908ea3ffc7941df95752ba309ef5de72c442062bb566936b4cb600af0a",
+  "content_hash": "52a35ad1109a860118c65205038b56e422d5c631c2d22833a87d9df43730a356",
+  "supersedes": null,
+  "correction_reason": null,
+  "rating": "Sell",
+  "conclusion": "报告建议对石英股份主动降低风险敞口、暂不新增多头。低杠杆和流动性使公司具备修复时间，但高估值、利润率下行、库存快于收入、现金流转化偏弱及趋势未修复，尚不足以补偿持仓风险。",
+  "advice_matrix": [
+    {
+      "position": "none",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "继续空仓，不因48.97元超跌反弹追买，等待中报和趋势共同验证。",
+          "action_class": "avoid",
+          "conditions": [
+            "MACD仍未改善",
+            "中报质量尚未验证"
+          ],
+          "risk": "单日反抽可能在高估值下迅速回落。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "空仓者仅在放量站稳56.24元且MACD改善后再评估参与。",
+          "action_class": "avoid",
+          "conditions": [
+            "价格持续高于10日EMA 56.24元",
+            "MACD柱持续收敛"
+          ],
+          "risk": "等待确认会错过部分反弹。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "不建立战略多头，待收入修复传导至净利率、库存和现金流后再试探。",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "净利率企稳回升",
+            "库存转化为销售且现金流增强"
+          ],
+          "risk": "修复预期落空会触发估值压缩。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "维持无仓，直到中报验证库存转化和经营现金流显著增强。",
+          "action_class": "avoid",
+          "conditions": [
+            "存货增速明显回落",
+            "经营现金流显著高于当前水平"
+          ],
+          "risk": "高库存可能增加周转和跌价压力。"
+        }
+      ]
+    },
+    {
+      "position": "light",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "将轻仓分批降至单股目标仓位的0至0.5倍，反弹中不加仓。",
+          "action_class": "reduce",
+          "conditions": [
+            "估值仍处PE 193倍附近",
+            "价格未站稳49.57元"
+          ],
+          "risk": "分批减仓可能在高波动中产生执行偏差。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "轻仓若再跌破41.82元则退出，避免把下轨当成基本面支撑。",
+          "action_class": "reduce",
+          "conditions": [
+            "收盘有效跌破布林下轨41.82元",
+            "趋势未出现修复"
+          ],
+          "risk": "下破后波动扩张可能加大损失。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "保留的轻仓仅作观察仓，未收复49.57元前不提高风险暴露。",
+          "action_class": "hold",
+          "conditions": [
+            "价格仍低于200日SMA 49.57元",
+            "中报前缺乏公司级催化"
+          ],
+          "risk": "长期均线下方的反弹不等于趋势反转。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "暂停新增配置，等待净利率企稳、库存增速回落与现金流改善共振。",
+          "action_class": "conditional_add",
+          "conditions": [
+            "净利率不再同比下滑",
+            "经营现金流持续改善"
+          ],
+          "risk": "单一指标改善不足以证明经营修复。"
+        }
+      ]
+    },
+    {
+      "position": "medium",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "优先卖出中等仓位的超配部分，将科技主题集中度降回风险预算内。",
+          "action_class": "reduce",
+          "conditions": [
+            "持仓超过组合基准",
+            "主题波动仍高"
+          ],
+          "risk": "行业反弹会带来减仓机会成本。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "按预设批次把中等仓位降至低配，避免在ATR 5.99元环境下一次性成交。",
+          "action_class": "reduce",
+          "conditions": [
+            "ATR维持高位",
+            "成交流动性正常"
+          ],
+          "risk": "集中成交可能放大滑点。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "中等仓位只保留最小观察敞口，未站稳56.24元前不恢复配置。",
+          "action_class": "hold",
+          "conditions": [
+            "价格低于10日EMA 56.24元",
+            "MACD未上穿信号线"
+          ],
+          "risk": "技术修复失败会延续下行结构。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "若中报显示利润率下行、库存累积或现金流转弱，则把中等仓位降至零。",
+          "action_class": "reduce",
+          "conditions": [
+            "利润率继续恶化",
+            "库存继续快于收入增长"
+          ],
+          "risk": "盈利与营运资本压力可能共同压缩估值。"
+        }
+      ]
+    },
+    {
+      "position": "heavy",
+      "cells": [
+        {
+          "style": "short_aggressive",
+          "action": "立即削减重仓至常规单股目标仓位以下，优先释放集中风险。",
+          "action_class": "reduce",
+          "conditions": [
+            "重仓集中度高",
+            "风险预算紧张"
+          ],
+          "risk": "高估值与高波动会放大组合回撤。"
+        },
+        {
+          "style": "short_conservative",
+          "action": "将重仓分批退出至零至低配，不以单日板块反弹替代风险纪律。",
+          "action_class": "reduce",
+          "conditions": [
+            "板块反弹缺少连续性",
+            "公司级催化未验证"
+          ],
+          "risk": "主题资金轮动可能造成反复波动。"
+        },
+        {
+          "style": "long_aggressive",
+          "action": "重仓退出后不重新加码，等待价格、MACD和中报质量三项确认同步出现。",
+          "action_class": "conditional_enter",
+          "conditions": [
+            "价格收复均线",
+            "中报验证利润和现金流改善"
+          ],
+          "risk": "过早重建会为未验证修复预付款。"
+        },
+        {
+          "style": "long_conservative",
+          "action": "把剩余重仓降为最小观察仓，若跌破41.82元或现金流恶化则完全退出。",
+          "action_class": "reduce",
+          "conditions": [
+            "价格有效跌破41.82元",
+            "经营现金流再度走弱"
+          ],
+          "risk": "库存去化延迟会增加资本占用和下行风险。"
+        }
+      ]
+    }
+  ],
+  "metric_groups": [
+    {
+      "group": "trend",
+      "label": "趋势",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收盘价与均线/布林位置",
+          "source_value": "收盘48.97元；10日EMA 56.24元；50日SMA 70.24元；200日SMA 49.57元；布林下轨41.82元",
+          "unit": "元",
+          "as_of_date": "2026-07-21",
+          "interpretation": "收盘仍低于三条均线，仅回到布林下轨上方，趋势未获修复。",
+          "decision_impact": "未站稳56.24元前维持减配，41.82元失守时继续退出。"
+        }
+      ]
+    },
+    {
+      "group": "momentum",
+      "label": "动量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "MACD、RSI与ATR",
+          "source_value": "MACD -6.30；信号线-3.64；柱值-2.66；RSI 32.93；ATR 5.99元",
+          "unit": "指标值/元",
+          "as_of_date": "2026-07-21",
+          "interpretation": "动量仍弱，RSI回升只支持超跌反抽观察，ATR显示高波动。",
+          "decision_impact": "分批降仓并等待MACD改善，不把反弹视为加仓依据。"
+        }
+      ]
+    },
+    {
+      "group": "valuation",
+      "label": "估值",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "TTM估值倍数",
+          "source_value": "PE-TTM 193.12；PB 4.53；PS-TTM 26.25",
+          "unit": "倍",
+          "as_of_date": "2026-07-21",
+          "interpretation": "市场已计入强复苏预期，对利润、现金流和库存偏差的容忍度低。",
+          "decision_impact": "中报验证前不支持新增或高配。"
+        }
+      ]
+    },
+    {
+      "group": "fundamental_quality",
+      "label": "基本面质量",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "收入、利润率与经营现金流",
+          "source_value": "2026Q1收入2.5645亿元、同比+1.03%；归母净利3677万元、同比-30.29%；毛利率36.27%；净利率13.86%；经营现金流486万元",
+          "unit": "亿元/百分比",
+          "as_of_date": "2026-03-31",
+          "interpretation": "收入初步企稳但利润率和现金流转化仍弱于高估值所需验证。",
+          "decision_impact": "利润率和现金流未同步改善前保持防御配置。"
+        }
+      ]
+    },
+    {
+      "group": "capital_risk",
+      "label": "资金与风险",
+      "status": "supported",
+      "metrics": [
+        {
+          "name": "流动性与营运资本",
+          "source_value": "资产负债率5.18%；流动比率14.64；交易性金融资产20.44亿元；存货11.41亿元；应收2.67亿元",
+          "unit": "百分比/亿元",
+          "as_of_date": "2026-03-31",
+          "interpretation": "流动性和低杠杆降低断裂风险，但存货增速快于收入仍需验证。",
+          "decision_impact": "不作无条件清仓判断，但限制仓位直到库存和回款改善。"
+        }
+      ]
+    }
+  ],
+  "disclaimer": {
+    "historical_boundary": "本页是截至分析日期的历史研究快照。",
+    "ai_assisted": "内容由AI辅助整理。",
+    "not_investment_advice": "内容不构成投资建议。",
+    "public_access": "本页公开且可下载，noindex不是访问控制。"
+  },
+  "report_route": "/stocks/603688-sh/2026-07-22/20260722-111025-52a35ad1/",
+  "download_route": "/reports/603688-sh/2026-07-22/20260722-111025-52a35ad1/complete_report.md"
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "ticker": "603688.SH",
+  "ticker_slug": "603688-sh",
+  "company": "石英股份",
+  "market": "A股",
+  "analysis_date": "2026-07-22",
+  "publication_date": "2026-07-22",
+  "source_display_timestamp": "20260722_111025",
+  "version_id": "20260722-111025-52a35ad1",
+  "source_tree_hash": "b0e33a908ea3ffc7941df95752ba309ef5de72c442062bb566936b4cb600af0a",
+  "content_hash": "52a35ad1109a860118c65205038b56e422d5c631c2d22833a87d9df43730a356",
+  "summary_sha256": "2808f679252e4a0b4a4f0887d8c5d2db22eeeb600bf93db3f9a087e052790411",
+  "complete_report_sha256": "055fa8131f90745c675cc22512d1d4b34931e4840d7eb7decd7079a57f839474",
+  "publisher_version": "0.1.0",
+  "supersedes": null,
+  "correction_reason": null,
+  "report_route": "/stocks/603688-sh/2026-07-22/20260722-111025-52a35ad1/",
+  "download_route": "/reports/603688-sh/2026-07-22/20260722-111025-52a35ad1/complete_report.md"
+}
